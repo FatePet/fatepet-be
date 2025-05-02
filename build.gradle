@@ -1,0 +1,69 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.4.5'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.fatepet'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// spring
+//	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	// mysql
+	//	runtimeOnly 'com.mysql:mysql-connector-j'
+
+	// lombok
+	annotationProcessor 'org.projectlombok:lombok'
+	compileOnly 'org.projectlombok:lombok'
+
+	// aws lambda
+	implementation 'com.amazonaws.serverless:aws-serverless-java-container-springboot3:2.0.1'
+	implementation 'com.amazonaws:aws-lambda-java-core:1.2.2'
+	implementation 'com.amazonaws:aws-lambda-java-events:3.11.1'
+	runtimeOnly 'com.amazonaws:aws-lambda-java-log4j2:1.5.1'
+
+
+	// test
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+
+tasks.register('buildZip', Zip) {
+	from compileJava
+	from processResources
+
+	into('lib') {
+		from(configurations.runtimeClasspath) {
+			exclude 'tomcat-embed-*'
+		}
+	}
+
+	archiveFileName = "lambda.zip"
+	destinationDirectory = file("$buildDir/distributions")
+}
+
+build.dependsOn buildZip
