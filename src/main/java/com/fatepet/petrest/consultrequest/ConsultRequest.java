@@ -11,7 +11,7 @@ public class ConsultRequest {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "funeral_business_id")
     private FuneralBusiness business;
 
