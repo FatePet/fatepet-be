@@ -2,10 +2,16 @@ package com.fatepet.petrest.addtionalinfo;
 
 import com.fatepet.petrest.business.funeral.FuneralBusiness;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AdditionalInfo {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,4 +29,10 @@ public class AdditionalInfo {
 
     private LocalDateTime updatedAt;
 
+    @Builder
+    private AdditionalInfo(FuneralBusiness business, String imageUrl, String description) {
+        this.business = business;
+        this.imageUrl = imageUrl;
+        this.description = description;
+    }
 }

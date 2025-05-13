@@ -1,20 +1,34 @@
 package com.fatepet.petrest.business.funeral;
 
+import com.fatepet.global.exception.FuneralBusinessException;
+import com.fatepet.global.response.ResponseCode;
+import com.fatepet.petrest.addtionalimage.AdditionalImage;
+import com.fatepet.petrest.addtionalimage.AdditionalImageRepository;
+import com.fatepet.petrest.addtionalinfo.AdditionalInfo;
+import com.fatepet.petrest.addtionalinfo.AdditionalInfoRepository;
 import com.fatepet.petrest.business.controller.dto.request.BusinessSearchRequest;
 import com.fatepet.petrest.business.controller.dto.response.BusinessResponse;
+import com.fatepet.petrest.business.controller.dto.response.FuneralBusinessDetailsResponse;
+import com.fatepet.petrest.funeralproduct.FuneralProduct;
+import com.fatepet.petrest.funeralproduct.FuneralProductRepository;
+import com.fatepet.petrest.funeralproduct.controller.dto.response.FuneralProductResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class FuneralBusinessService {
 
     private final FuneralBusinessRepository funeralBusinessRepository;
+    private final FuneralProductRepository funeralProductRepository;
+    private final AdditionalInfoRepository additionalInfoRepository;
+    private final AdditionalImageRepository additionalImageRepository;
 
     public List<BusinessResponse> getBusinessList(Pageable pageable) {
         return funeralBusinessRepository.findAll(pageable)
@@ -31,6 +45,18 @@ public class FuneralBusinessService {
                 .limit(pageable.getPageSize())
                 .map(BusinessResponse::from)
                 .toList();
+    }
+
+    public FuneralBusinessDetailsResponse getBusinessDetails(Long businessId) {
+        FuneralBusiness business = funeralBusinessRepository.findById(businessId)
+                .orElseThrow(() -> new FuneralBusinessException(ResponseCode.NOT_FOUND));
+
+        List<FuneralProduct> products = funeralProductRepository.findAllByBusinessId(businessId);
+
+        AdditionalInfo additionalInfo = additionalInfoRepository.findByBusinessId(businessId);
+        List<AdditionalImage> additionalImages = additionalImageRepository.findAllByAdditionalInfoId(additionalInfo.getId());
+
+        return FuneralBusinessDetailsResponse.from(business, products,additionalInfo, additionalImages);
     }
 
     private double haversine(double lat1, double lon1, double lat2, double lon2) {

@@ -40,14 +40,3 @@ public class BusinessResponse {
                 .build();
     }
 }
-
-
-//{
-//        "businessId": 1,
-//        "category": "장묘",
-//        "name": "장묘업체 A",
-//        "address": "서울시 강남구",
-//        "thumbnailUrl": "https://example.com/image.jpg",
-//        "businessHours": "매일 24시간 연중 무휴",
-//        "phoneNumber": "010-1234-1234"
-//        },
