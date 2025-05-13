@@ -1,6 +1,6 @@
 package com.fatepet.petrest.funeralproduct;
 
-import com.fatepet.petrest.funeralbusiness.FuneralBusiness;
+import com.fatepet.petrest.business.funeral.FuneralBusiness;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
