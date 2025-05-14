@@ -35,7 +35,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
-        LoginRequestDTO loginRequestDTO = null;
+        LoginRequestDTO loginRequestDTO;
         try {
             loginRequestDTO = objectMapper.readValue(request.getInputStream(), LoginRequestDTO.class);
         } catch (IOException e) {
