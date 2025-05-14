@@ -1,7 +1,7 @@
 -- 사용자 데이터
 INSERT INTO users (id, username, password, name, role, created_at, updated_at)
 VALUES
-    (1, 'owner1@example.com', 'encoded-password', '장묘업체 대표', 'ADMIN', NOW(), NOW()),
+    (1, 'owner1@example.com', '$2a$10$thIPcN4tpN.qkLqZveh3h.gBiX6oIdLSch9qkdgr/8.id.Ot8J4Sq', '장묘업체 대표', 'ADMIN', NOW(), NOW()),
     (2, 'owner2@example.com', 'encoded-password', '장묘업체 대표2', 'ADMIN', NOW(), NOW()),
     (3, 'owner3@example.com', 'encoded-password', '장묘업체 대표3', 'ADMIN', NOW(), NOW());
 
