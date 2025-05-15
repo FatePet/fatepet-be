@@ -38,3 +38,6 @@ out/
 
 .aws-sam/
 samconfig.toml
+
+application-local.yml
+

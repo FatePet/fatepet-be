@@ -2,8 +2,8 @@ package com.fatepet.petrest.addtionalimage;
 
 import com.fatepet.petrest.addtionalinfo.AdditionalInfo;
 import com.fatepet.petrest.addtionalinfo.AdditionalInfoRepository;
-import com.fatepet.petrest.business.funeral.FuneralBusiness;
-import com.fatepet.petrest.business.funeral.FuneralBusinessRepository;
+import com.fatepet.petrest.business.FuneralBusiness;
+import com.fatepet.petrest.business.FuneralBusinessRepository;
 import com.fatepet.petrest.user.Role;
 import com.fatepet.petrest.user.User;
 import com.fatepet.petrest.user.UserRepository;
@@ -17,7 +17,6 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @ActiveProfiles("test")

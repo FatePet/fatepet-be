@@ -1,12 +1,15 @@
-package com.fatepet.petrest.consultrequest;
+package com.fatepet.petrest.counseling;
 
-import com.fatepet.petrest.business.funeral.FuneralBusiness;
+import com.fatepet.petrest.business.FuneralBusiness;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
-public class ConsultRequest {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Counseling {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

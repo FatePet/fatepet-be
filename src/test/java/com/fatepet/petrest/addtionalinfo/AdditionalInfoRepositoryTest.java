@@ -1,22 +1,17 @@
 package com.fatepet.petrest.addtionalinfo;
 
-import com.fatepet.petrest.business.funeral.FuneralBusiness;
-import com.fatepet.petrest.business.funeral.FuneralBusinessRepository;
-import com.fatepet.petrest.funeralproduct.FuneralProductRepository;
+import com.fatepet.petrest.business.FuneralBusiness;
+import com.fatepet.petrest.business.FuneralBusinessRepository;
 import com.fatepet.petrest.user.Role;
 import com.fatepet.petrest.user.User;
 import com.fatepet.petrest.user.UserRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @ActiveProfiles("test")

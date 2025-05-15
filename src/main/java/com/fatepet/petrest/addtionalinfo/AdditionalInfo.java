@@ -1,6 +1,6 @@
 package com.fatepet.petrest.addtionalinfo;
 
-import com.fatepet.petrest.business.funeral.FuneralBusiness;
+import com.fatepet.petrest.business.FuneralBusiness;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
