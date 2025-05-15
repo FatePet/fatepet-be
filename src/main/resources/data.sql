@@ -13,7 +13,7 @@ INSERT INTO funeral_business (
 )
 VALUES
     (1, '포포우즈 장례센터', '서울특별시 강남구 테헤란로 123', 37.495, 127.032,
-     'https://example.com/image.jpg', '24시간 연중무휴', '010-1234-5678',
+     'https://example.com/image.jpg', '24시간 연중무휴', '010-3185-3484',
      'funeral@example.com', '반려동물 장례 전문 업체입니다.', 1, 1, NOW(), NOW()),
     (2, '위드펫 메모리얼', '서울특별시 송파구 올림픽로 88', 37.515, 127.105,
      'https://example.com/image2.jpg', '10:00 ~ 22:00', '010-9876-5432',

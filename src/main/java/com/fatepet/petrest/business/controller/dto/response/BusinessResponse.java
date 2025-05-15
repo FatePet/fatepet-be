@@ -1,6 +1,6 @@
 package com.fatepet.petrest.business.controller.dto.response;
 
-import com.fatepet.petrest.business.funeral.FuneralBusiness;
+import com.fatepet.petrest.business.FuneralBusiness;
 import lombok.Builder;
 import lombok.Getter;
 

@@ -1,4 +1,4 @@
-package com.fatepet.petrest.business.funeral;
+package com.fatepet.petrest.business;
 
 import com.fatepet.global.exception.FuneralBusinessException;
 import com.fatepet.global.response.ResponseCode;
@@ -6,12 +6,10 @@ import com.fatepet.petrest.addtionalimage.AdditionalImage;
 import com.fatepet.petrest.addtionalimage.AdditionalImageRepository;
 import com.fatepet.petrest.addtionalinfo.AdditionalInfo;
 import com.fatepet.petrest.addtionalinfo.AdditionalInfoRepository;
-import com.fatepet.petrest.business.controller.dto.request.BusinessSearchRequest;
 import com.fatepet.petrest.business.controller.dto.response.BusinessResponse;
 import com.fatepet.petrest.business.controller.dto.response.FuneralBusinessDetailsResponse;
 import com.fatepet.petrest.funeralproduct.FuneralProduct;
 import com.fatepet.petrest.funeralproduct.FuneralProductRepository;
-import com.fatepet.petrest.funeralproduct.controller.dto.response.FuneralProductResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

@@ -32,6 +32,7 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 
 
+
 	// mysql
 		runtimeOnly 'com.mysql:mysql-connector-j'
 
@@ -45,15 +46,25 @@ dependencies {
 	implementation 'com.amazonaws:aws-lambda-java-events:3.11.1'
 	runtimeOnly 'com.amazonaws:aws-lambda-java-log4j2:1.5.1'
 
+
+	// sms
+	implementation 'net.nurigo:sdk:4.3.0'
+
+
+
 	// JWT
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
 	implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
 
+
 	// test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testImplementation 'com.h2database:h2'
+
+	implementation("me.paulschwarz:spring-dotenv:4.0.0")
+
 }
 
 tasks.named('test') {

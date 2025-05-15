@@ -14,5 +14,12 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
 
 
+
+coolsms:
+  apikey: ${COOLSMS_API_KEY}
+  apisecret: ${COOLSMS_API_SECRET}
+  fromnumber: ${COOLSMS_FROM_NUMBER}
+
   jwt:
     secret: ${SECRET_KEY}
+

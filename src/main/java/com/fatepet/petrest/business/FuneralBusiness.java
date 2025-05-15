@@ -1,4 +1,4 @@
-package com.fatepet.petrest.business.funeral;
+package com.fatepet.petrest.business;
 
 import com.fatepet.petrest.user.User;
 import jakarta.persistence.*;

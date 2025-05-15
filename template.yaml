@@ -24,6 +24,15 @@ Parameters:
     Type: String
     Description: 비밀번호
 
+  CoolSmsApiKey:
+    Type: String
+
+  CoolSmsApiSecret:
+    Type: String
+
+  CoolSmsFromNumber:
+    Type: String
+
 Globals:
   Function:
     Timeout: 30
@@ -36,6 +45,10 @@ Globals:
         DB_NAME: !Ref DbName
         DB_USER: !Ref DbUser
         DB_PASSWORD: !Ref DbPassword
+
+        COOLSMS_API_KEY: !Ref CoolSmsApiKey
+        COOLSMS_API_SECRET: !Ref CoolSmsApiSecret
+        COOLSMS_FROM_NUMBER: !Ref CoolSmsFromNumber
 
 Resources:
   PetFunction:

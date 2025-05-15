@@ -3,7 +3,7 @@ package com.fatepet.petrest.business.controller.dto.response;
 import com.fatepet.petrest.addtionalimage.AdditionalImage;
 import com.fatepet.petrest.addtionalinfo.AdditionalInfo;
 import com.fatepet.petrest.addtionalinfo.controller.dto.response.AdditionalInfoResponse;
-import com.fatepet.petrest.business.funeral.FuneralBusiness;
+import com.fatepet.petrest.business.FuneralBusiness;
 import com.fatepet.petrest.funeralproduct.FuneralProduct;
 import com.fatepet.petrest.funeralproduct.controller.dto.response.FuneralProductResponse;
 import lombok.Builder;
