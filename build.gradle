@@ -28,6 +28,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	testImplementation 'org.springframework.security:spring-security-test'
+
 
 
 	// mysql
@@ -43,9 +46,16 @@ dependencies {
 	implementation 'com.amazonaws:aws-lambda-java-events:3.11.1'
 	runtimeOnly 'com.amazonaws:aws-lambda-java-log4j2:1.5.1'
 
+
 	// sms
 	implementation 'net.nurigo:sdk:4.3.0'
 
+
+
+	// JWT
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
 
 
 	// test
