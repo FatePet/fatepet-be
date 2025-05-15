@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FuneralBusinessRepository extends JpaRepository<FuneralBusiness, Long> {
 
-    Boolean existsByName(String name);
+    boolean existsByName(String name);
 }
