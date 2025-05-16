@@ -1,11 +1,10 @@
 package com.fatepet.petrest.counseling;
 
-import com.fatepet.global.exception.FuneralBusinessException;
-import com.fatepet.global.response.ResponseCode;
+import com.fatepet.petrest.global.exception.FuneralBusinessException;
+import com.fatepet.petrest.global.response.ResponseCode;
 import com.fatepet.petrest.SmsService;
 import com.fatepet.petrest.business.FuneralBusiness;
 import com.fatepet.petrest.business.FuneralBusinessRepository;
-import com.fatepet.petrest.counseling.controller.dto.request.CounselingRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

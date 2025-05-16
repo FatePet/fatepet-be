@@ -1,7 +1,7 @@
 package com.fatepet.petrest;
 
-import com.fatepet.global.exception.SmsException;
-import com.fatepet.global.response.ResponseCode;
+import com.fatepet.petrest.global.exception.SmsException;
+import com.fatepet.petrest.global.response.ResponseCode;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

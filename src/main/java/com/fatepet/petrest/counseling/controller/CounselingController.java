@@ -1,7 +1,7 @@
 package com.fatepet.petrest.counseling.controller;
 
-import com.fatepet.global.response.ApiResponse;
-import com.fatepet.global.response.ResponseCode;
+import com.fatepet.petrest.global.response.ApiResponse;
+import com.fatepet.petrest.global.response.ResponseCode;
 import com.fatepet.petrest.counseling.CounselingService;
 import com.fatepet.petrest.counseling.controller.dto.request.CounselingRequest;
 import lombok.RequiredArgsConstructor;

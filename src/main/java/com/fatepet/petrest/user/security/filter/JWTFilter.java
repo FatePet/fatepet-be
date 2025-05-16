@@ -1,8 +1,8 @@
 package com.fatepet.petrest.user.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fatepet.global.response.ApiResponse;
-import com.fatepet.global.response.ResponseCode;
+import com.fatepet.petrest.global.response.ApiResponse;
+import com.fatepet.petrest.global.response.ResponseCode;
 import com.fatepet.petrest.user.Role;
 import com.fatepet.petrest.user.security.dto.CustomUserDetails;
 import com.fatepet.petrest.user.security.util.JWTUtil;
