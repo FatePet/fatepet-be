@@ -49,11 +49,12 @@ public class FuneralBusiness {
     private LocalDateTime updatedAt;
 
     @Builder
-    private FuneralBusiness(String name, String address, double latitude, double longitude, String mainImageUrl,
+    private FuneralBusiness(String name, String category, String address, double latitude, double longitude, String mainImageUrl,
                             String businessHours, String phoneNumber, String email, String additionalInfo,
                             User owner, Integer recommendRank) {
         this.name = name;
         this.address = address;
+        this.category = category;
         this.latitude = latitude;
         this.longitude = longitude;
         this.mainImageUrl = mainImageUrl;
