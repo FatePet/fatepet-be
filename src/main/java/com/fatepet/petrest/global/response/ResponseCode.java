@@ -1,4 +1,4 @@
-package com.fatepet.global.response;
+package com.fatepet.petrest.global.response;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

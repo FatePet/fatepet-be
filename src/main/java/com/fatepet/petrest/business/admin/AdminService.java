@@ -18,6 +18,7 @@ import com.fatepet.petrest.user.User;
 import com.fatepet.petrest.user.UserRepository;
 import com.fatepet.petrest.user.security.dto.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AdminService {
 
     private final FuneralBusinessRepository funeralBusinessRepository;
@@ -143,12 +145,14 @@ public class AdminService {
         User user = userRepository.findByUsername(customUserDetails.getUsername());
         Optional<FuneralBusiness> business = funeralBusinessRepository.findById(businessId);
         if (business.isEmpty()) {
+            log.error("해당 없체 존대 하지 않음 오류");
             throw new IllegalArgumentException("해당 업체가 존재하지 않습니다.");
         }
 
         FuneralBusiness funeralBusiness = business.get();
 
         if (!funeralBusiness.getOwner().equals(user)) {
+            log.error("등록한 업체 아닌 오류");
             throw new IllegalArgumentException("등록한 업체가 아닙니다.");
         }
 

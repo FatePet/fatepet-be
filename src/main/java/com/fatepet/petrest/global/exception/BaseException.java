@@ -1,6 +1,6 @@
-package com.fatepet.global.exception;
+package com.fatepet.petrest.global.exception;
 
-import com.fatepet.global.response.ResponseCode;
+import com.fatepet.petrest.global.response.ResponseCode;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 

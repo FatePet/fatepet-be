@@ -1,7 +1,7 @@
 package com.fatepet.petrest.user.security;
 
-import com.fatepet.global.response.ApiResponse;
-import com.fatepet.global.response.ResponseCode;
+import com.fatepet.petrest.global.response.ApiResponse;
+import com.fatepet.petrest.global.response.ResponseCode;
 import com.fatepet.petrest.user.security.util.JWTUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

@@ -67,6 +67,7 @@ public class SecurityConfig {
         http
                 .addFilterAt(new LoginFilter(authenticationManager(aAuthenticationConfiguration), objectMapper, jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
+
         http
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));

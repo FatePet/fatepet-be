@@ -1,7 +1,7 @@
-package com.fatepet.global.exception;
+package com.fatepet.petrest.global.exception;
 
-import com.fatepet.global.response.ApiResponse;
-import com.fatepet.global.response.ResponseCode;
+import com.fatepet.petrest.global.response.ApiResponse;
+import com.fatepet.petrest.global.response.ResponseCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
