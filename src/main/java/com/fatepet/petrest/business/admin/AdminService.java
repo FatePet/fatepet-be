@@ -8,6 +8,7 @@ import com.fatepet.petrest.addtionalimage.AdditionalImageRepository;
 import com.fatepet.petrest.business.FuneralBusiness;
 import com.fatepet.petrest.business.FuneralBusinessRepository;
 import com.fatepet.petrest.business.admin.request.FuneralProductRequest;
+import com.fatepet.petrest.business.admin.response.BusinessListResponse;
 import com.fatepet.petrest.common.S3Uploader;
 import com.fatepet.petrest.funeralproduct.FuneralProduct;
 import com.fatepet.petrest.funeralproduct.FuneralProductRepository;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +40,22 @@ public class AdminService {
     }
 
     @Transactional
+    public List<BusinessListResponse> getBusinessListAdmin(CustomUserDetails customUserDetails) {
+        User user = userRepository.findByUsername(customUserDetails.getUsername());
+        List<FuneralBusiness> businesses = funeralBusinessRepository.findByOwner(user);
+
+        return businesses.stream()
+                .map(business -> BusinessListResponse.builder()
+                        .businessId(business.getId())
+                        .name(business.getName())
+                        .address(business.getAddress())
+                        .category(business.getCategory())
+                        .thumbnailUrl(business.getMainImageUrl())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
     public void addBusiness(String name, String category, MultipartFile thumbnail,
                             String address, Double latitude, Double longitude,
                             String businessHours, String phoneNumber, String email,
@@ -50,6 +68,7 @@ public class AdminService {
         FuneralBusiness business = FuneralBusiness.builder()
                 .name(name)
                 .mainImageUrl(mainImageUrl)
+                .category(category)
                 .address(address)
                 .latitude(latitude)
                 .longitude(longitude)

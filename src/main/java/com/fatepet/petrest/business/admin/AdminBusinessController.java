@@ -3,6 +3,7 @@ package com.fatepet.petrest.business.admin;
 import com.fatepet.global.response.ApiResponse;
 import com.fatepet.global.response.ResponseCode;
 import com.fatepet.petrest.business.admin.request.FuneralProductRequest;
+import com.fatepet.petrest.business.admin.response.BusinessListResponse;
 import com.fatepet.petrest.user.security.dto.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
@@ -53,4 +56,9 @@ public class AdminBusinessController {
         return ResponseEntity.status(ResponseCode.CREATED.getStatusCode()).body(ApiResponse.of(ResponseCode.CREATED));
     }
 
+    @GetMapping("/business")
+    public ResponseEntity<ApiResponse<List<BusinessListResponse>>> getBusinessListAdmin(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        List<BusinessListResponse> businessListAdmin = adminService.getBusinessListAdmin(customUserDetails);
+        return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS, businessListAdmin));
+    }
 }
