@@ -61,4 +61,10 @@ public class AdminBusinessController {
         List<BusinessListResponse> businessListAdmin = adminService.getBusinessListAdmin(customUserDetails);
         return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS, businessListAdmin));
     }
+
+    @DeleteMapping("/business/{businessId}")
+    public ResponseEntity<ApiResponse<Void>> deleteBusiness(@AuthenticationPrincipal CustomUserDetails customUserDetails, @PathVariable("businessId") Long businessId) {
+        adminService.deleteBusiness(customUserDetails, businessId);
+        return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS));
+    }
 }

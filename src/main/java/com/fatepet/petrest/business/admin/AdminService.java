@@ -10,6 +10,7 @@ import com.fatepet.petrest.business.FuneralBusinessRepository;
 import com.fatepet.petrest.business.admin.request.FuneralProductRequest;
 import com.fatepet.petrest.business.admin.response.BusinessListResponse;
 import com.fatepet.petrest.common.S3Uploader;
+import com.fatepet.petrest.counseling.CounselingRepository;
 import com.fatepet.petrest.funeralproduct.FuneralProduct;
 import com.fatepet.petrest.funeralproduct.FuneralProductRepository;
 import com.fatepet.petrest.funeralproduct.ProductCategory;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,7 +33,8 @@ public class AdminService {
     private final FuneralBusinessRepository funeralBusinessRepository;
     private final UserRepository userRepository;
     private final AdditionalImageRepository additionalImageRepository;
-    private final FuneralProductRepository productRepository;
+    private final FuneralProductRepository funeralProductRepository;
+    private final CounselingRepository counselingRepository;
     private final ObjectMapper objectMapper;
     private final S3Uploader s3Uploader;
 
@@ -121,7 +124,7 @@ public class AdminService {
                     .imageUrl(imageUrl)
                     .build();
 
-            productRepository.save(product);
+            funeralProductRepository.save(product);
         }
     }
 
@@ -133,6 +136,27 @@ public class AdminService {
             throw new IllegalArgumentException("서비스 항목 JSON 파싱 실패", e);
         }
         return serviceList;
+    }
+
+    @Transactional
+    public void deleteBusiness(CustomUserDetails customUserDetails, Long businessId) {
+        User user = userRepository.findByUsername(customUserDetails.getUsername());
+        Optional<FuneralBusiness> business = funeralBusinessRepository.findById(businessId);
+        if (business.isEmpty()) {
+            throw new IllegalArgumentException("해당 업체가 존재하지 않습니다.");
+        }
+
+        FuneralBusiness funeralBusiness = business.get();
+
+        if (!funeralBusiness.getOwner().equals(user)) {
+            throw new IllegalArgumentException("등록한 업체가 아닙니다.");
+        }
+
+        funeralProductRepository.deleteAllByBusiness(funeralBusiness);
+        counselingRepository.deleteAllByBusiness(funeralBusiness);
+        additionalImageRepository.deleteAllByBusiness(funeralBusiness);
+
+        funeralBusinessRepository.delete(funeralBusiness);
     }
 
 }
