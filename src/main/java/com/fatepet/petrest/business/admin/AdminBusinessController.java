@@ -1,10 +1,15 @@
 package com.fatepet.petrest.business.admin;
 
 import com.fatepet.global.response.ApiResponse;
+import com.fatepet.global.response.ResponseCode;
+import com.fatepet.petrest.business.admin.request.FuneralProductRequest;
+import com.fatepet.petrest.user.security.dto.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/admin")
@@ -23,4 +28,29 @@ public class AdminBusinessController {
             return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK.value(), "중복 검사를 통과했습니다."));
         }
     }
+
+    @PostMapping("/business")
+    public ResponseEntity<ApiResponse<Void>> addBusiness(@AuthenticationPrincipal CustomUserDetails customUserDetails,
+                                                         @RequestParam("name") String name,
+                                                         @RequestParam("category") String category,
+                                                         @RequestPart("thumbnail") MultipartFile thumbnail,
+                                                         @RequestParam("address") String address,
+                                                         @RequestParam("latitude") Double latitude,
+                                                         @RequestParam("longitude") Double longitude,
+                                                         @RequestParam("businessHours") String businessHours,
+                                                         @RequestParam("phoneNumber") String phoneNumber,
+                                                         @RequestParam("email") String email,
+
+                                                         @RequestParam("service") String serviceJson, // JSON 문자열로 받음
+                                                         @RequestPart(value = "serviceImage", required = false) MultipartFile[] serviceImages,
+                                                         @RequestPart(value = "additionalImage", required = false) MultipartFile[] additionalImages,
+                                                         @RequestParam(value = "additionalInfo", required = false) String additionalInfo) {
+        adminService.addBusiness(name, category, thumbnail, address, latitude, longitude,
+                businessHours, phoneNumber, email, serviceJson,
+                serviceImages, additionalImages, additionalInfo,
+                customUserDetails);
+
+        return ResponseEntity.status(ResponseCode.CREATED.getStatusCode()).body(ApiResponse.of(ResponseCode.CREATED));
+    }
+
 }

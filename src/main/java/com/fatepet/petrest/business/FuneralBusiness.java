@@ -20,6 +20,8 @@ public class FuneralBusiness {
     @Column(unique = true)
     private String name;
 
+    private String category;
+
     private String address;
 
     private double latitude;
@@ -34,7 +36,7 @@ public class FuneralBusiness {
 
     private String email;
 
-    private String description;
+    private String additionalInfo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -48,7 +50,7 @@ public class FuneralBusiness {
 
     @Builder
     private FuneralBusiness(String name, String address, double latitude, double longitude, String mainImageUrl,
-                            String businessHours, String phoneNumber, String email, String description,
+                            String businessHours, String phoneNumber, String email, String additionalInfo,
                             User owner, Integer recommendRank) {
         this.name = name;
         this.address = address;
@@ -58,7 +60,7 @@ public class FuneralBusiness {
         this.businessHours = businessHours;
         this.phoneNumber = phoneNumber;
         this.email = email;
-        this.description = description;
+        this.additionalInfo = additionalInfo;
         this.owner = owner;
         this.recommendRank = recommendRank;
         this.createdAt = LocalDateTime.now();
