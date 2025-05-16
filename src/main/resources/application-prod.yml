@@ -21,3 +21,12 @@ coolsms:
   apisecret: ${COOLSMS_API_SECRET}
   fromnumber: ${COOLSMS_FROM_NUMBER}
 
+
+aws:
+  s3:
+    bucket-name: fatepet-mvp
+    region: ap-northeast-2
+  credentials:
+    access-key:
+    secret-key:
+

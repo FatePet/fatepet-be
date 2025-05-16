@@ -1,6 +1,6 @@
 package com.fatepet.petrest.addtionalimage;
 
-import com.fatepet.petrest.addtionalinfo.AdditionalInfo;
+import com.fatepet.petrest.business.FuneralBusiness;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -18,8 +18,8 @@ public class AdditionalImage {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "additional_info_id")
-    private AdditionalInfo additionalInfo;
+    @JoinColumn(name = "business_id")
+    private FuneralBusiness business;
 
     private String imageUrl;
 
@@ -28,8 +28,8 @@ public class AdditionalImage {
     private LocalDateTime updatedAt;
 
     @Builder
-    private AdditionalImage(AdditionalInfo additionalInfo, String imageUrl) {
-        this.additionalInfo = additionalInfo;
+    private AdditionalImage(FuneralBusiness business, String imageUrl) {
+        this.business = business;
         this.imageUrl = imageUrl;
     }
 }
