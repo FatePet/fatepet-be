@@ -2,6 +2,7 @@ package com.fatepet.petrest.global.exception;
 
 import com.fatepet.petrest.global.response.ApiResponse;
 import com.fatepet.petrest.global.response.ResponseCode;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,6 +16,15 @@ public class GlobalExceptionHandler {
         ApiResponse<Void> response = ApiResponse.of(e.getStatusCode(), e.getMessage());
         return ResponseEntity.status(e.getStatusCode()).body(response);
     }
+//    @ExceptionHandler(FuneralBusinessException.class)
+//    public ResponseEntity<ApiResponse<Void>> handleFuneralBusinessException(FuneralBusinessException e) {
+//        ApiResponse<Void> response = ApiResponse.of(e.getStatusCode(), e.getMessage());
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
+//
+//        return new ResponseEntity<>(response, headers, HttpStatus.valueOf(e.getStatusCode()));
+//    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleUnexpectedException(Exception e) {

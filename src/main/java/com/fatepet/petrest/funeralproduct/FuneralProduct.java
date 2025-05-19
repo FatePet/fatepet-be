@@ -2,16 +2,14 @@ package com.fatepet.petrest.funeralproduct;
 
 import com.fatepet.petrest.business.FuneralBusiness;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class FuneralProduct {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

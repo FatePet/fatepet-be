@@ -33,6 +33,20 @@ Parameters:
   CoolSmsFromNumber:
     Type: String
 
+  JwtSecretKey:
+    Type: String
+
+  MailUsername:
+    Type: String
+
+  MailPassword:
+    Type: String
+#  AWSAccessKey:
+#    Type: String
+#
+#  AWSSecretKey:
+#    Type: String
+
 Globals:
   Function:
     Timeout: 30
@@ -50,15 +64,45 @@ Globals:
         COOLSMS_API_SECRET: !Ref CoolSmsApiSecret
         COOLSMS_FROM_NUMBER: !Ref CoolSmsFromNumber
 
+        SECRET_KEY: !Ref JwtSecretKey
+
+        MAIL_USERNAME: !Ref MailUsername
+        MAIL_PASSWORD: !Ref MailPassword
+
+#        AWS_S3_BUCKET_NAME:
+#        AWS_SECRET_KEY: !Ref AWSSecretKey
+
+
 Resources:
   PetFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: com.fatepet.petrest.StreamLambdaHandler::handleRequest
+      Runtime: java17
       CodeUri: .
+      MemorySize: 1024
+      Timeout: 30
+      Policies:
+        - S3ReadPolicy:
+            BucketName: fatepet-mvp
+        - S3WritePolicy:
+            BucketName: fatepet-mvp
       Events:
         Api:
           Type: Api
           Properties:
             Path: /{proxy+}
             Method: ANY
+
+#Resources:
+#  PetFunction:
+#    Type: AWS::Serverless::Function
+#    Properties:
+#      Handler: com.fatepet.petrest.StreamLambdaHandler::handleRequest
+#      CodeUri: .
+#      Events:
+#        Api:
+#          Type: Api
+#          Properties:
+#            Path: /{proxy+}
+#            Method: ANY
