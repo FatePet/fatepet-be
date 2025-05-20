@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,6 +70,22 @@ public class AdminService {
                             CustomUserDetails customUserDetails) {
         User user = userRepository.findByUsername(customUserDetails.getUsername());
         String mainImageUrl = s3Uploader.uploadFile(thumbnail);
+
+        if (!isValidEmail(email)) {
+            throw new IllegalArgumentException("이메일 형식을 맞춰주세요.");
+        }
+
+        if (!isValidPhone(phoneNumber)) {
+            throw new IllegalArgumentException("전화번호 형식을 맞춰주세요.");
+        }
+
+        if (funeralBusinessRepository.existsByName(name)) {
+            throw new IllegalArgumentException("이미 등록된 업체 명 입니다.");
+        }
+
+        if (additionalImages.length > 10) {
+            throw new IllegalArgumentException("추가사진은 최대 10장 입니다.");
+        }
 
         FuneralBusiness business = FuneralBusiness.builder()
                 .name(name)
@@ -117,9 +134,16 @@ public class AdminService {
                 imageUrl = s3Uploader.uploadFile(serviceImages[imageIndex++]);
             }
 
+            ProductCategory productCategory;
+            try {
+                productCategory = ProductCategory.valueOf(dto.getType());
+            } catch (IllegalArgumentException | NullPointerException e) {
+                throw new IllegalArgumentException("서비스의 카테코리의 형식이 맞지 않습니다.");
+            }
+
             FuneralProduct product = FuneralProduct.builder()
                     .business(business)
-                    .category(ProductCategory.valueOf(dto.getType()))
+                    .category(productCategory)
                     .name(dto.getName())
                     .description(dto.getDescription())
                     .price(dto.getPrice())
@@ -140,19 +164,26 @@ public class AdminService {
         return serviceList;
     }
 
+    private boolean isValidEmail(String email) {
+        return Pattern.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$", email);
+    }
+
+    private boolean isValidPhone(String phone) {
+        return Pattern.matches("^(01[016789]-\\d{3,4}-\\d{4}|0\\d{1,2}-\\d{3,4}-\\d{4})$", phone);
+    }
+
+
     @Transactional
     public void deleteBusiness(CustomUserDetails customUserDetails, Long businessId) {
         User user = userRepository.findByUsername(customUserDetails.getUsername());
         Optional<FuneralBusiness> business = funeralBusinessRepository.findById(businessId);
         if (business.isEmpty()) {
-            log.error("해당 없체 존대 하지 않음 오류");
             throw new IllegalArgumentException("해당 업체가 존재하지 않습니다.");
         }
 
         FuneralBusiness funeralBusiness = business.get();
 
         if (!funeralBusiness.getOwner().equals(user)) {
-            log.error("등록한 업체 아닌 오류");
             throw new IllegalArgumentException("등록한 업체가 아닙니다.");
         }
 
