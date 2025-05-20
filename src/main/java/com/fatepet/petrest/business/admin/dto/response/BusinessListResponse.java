@@ -1,4 +1,4 @@
-package com.fatepet.petrest.business.admin.response;
+package com.fatepet.petrest.business.admin.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;

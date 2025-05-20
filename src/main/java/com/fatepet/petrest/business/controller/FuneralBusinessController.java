@@ -2,6 +2,8 @@ package com.fatepet.petrest.business.controller;
 
 import com.fatepet.petrest.SortOption;
 import com.fatepet.petrest.business.FuneralBusinessService;
+import com.fatepet.petrest.business.admin.AdminService;
+import com.fatepet.petrest.business.admin.valid.BusinessValidator;
 import com.fatepet.petrest.business.controller.dto.request.BusinessSearchRequest;
 import com.fatepet.petrest.business.controller.dto.response.BusinessResponse;
 import com.fatepet.petrest.business.controller.dto.response.FuneralBusinessDetailsResponse;
@@ -24,6 +26,7 @@ import java.util.List;
 public class FuneralBusinessController {
 
     private final FuneralBusinessService funeralBusinessService;
+    private final BusinessValidator businessValidator;
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<BusinessResponse>>> getBusinessList(BusinessSearchRequest request,
@@ -47,7 +50,7 @@ public class FuneralBusinessController {
 
     @GetMapping("/{businessId}")
     public ResponseEntity<ApiResponse<FuneralBusinessDetailsResponse>> getBusinessDetails(@AuthenticationPrincipal CustomUserDetails customUserDetails, @PathVariable Long businessId) {
-        funeralBusinessService.isValidAdmin(customUserDetails, businessId);
+        businessValidator.isValidAdmin(customUserDetails, businessId);
 
         FuneralBusinessDetailsResponse response = funeralBusinessService.getBusinessDetails(businessId);
         return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS, response));

@@ -69,15 +69,4 @@ public class FuneralBusinessService {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return R * c;
     }
-
-    public void isValidAdmin(CustomUserDetails customUserDetails, Long businessId) {
-        if (customUserDetails == null) {
-            return;
-        }
-        User user = userRepository.findByUsername(customUserDetails.getUsername());
-        FuneralBusiness funeralBusiness = funeralBusinessRepository.findById(businessId).get();
-        if (!funeralBusiness.getOwner().equals(user)) {
-            throw new IllegalArgumentException("등록한 업체가 아닙니다.");
-        }
-    }
 }

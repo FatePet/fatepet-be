@@ -1,4 +1,4 @@
-package com.fatepet.petrest.business.admin.request;
+package com.fatepet.petrest.business.admin.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FuneralProductRequest {
-    private String type;        // ex. "CREMATION"
+public class AddServiceDto {
+    private String type;
     private String name;
     private String description;
     private String price;
