@@ -8,6 +8,9 @@ import com.fatepet.petrest.funeralproduct.FuneralProduct;
 import com.fatepet.petrest.funeralproduct.FuneralProductRepository;
 import com.fatepet.petrest.global.exception.FuneralBusinessException;
 import com.fatepet.petrest.global.response.ResponseCode;
+import com.fatepet.petrest.user.User;
+import com.fatepet.petrest.user.UserRepository;
+import com.fatepet.petrest.user.security.dto.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class FuneralBusinessService {
 
+    private final UserRepository userRepository;
     private final FuneralBusinessRepository funeralBusinessRepository;
     private final FuneralProductRepository funeralProductRepository;
     private final AdditionalImageRepository additionalImageRepository;
@@ -64,5 +68,16 @@ public class FuneralBusinessService {
                 * Math.sin(dLon / 2) * Math.sin(dLon / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return R * c;
+    }
+
+    public void isValidAdmin(CustomUserDetails customUserDetails, Long businessId) {
+        if (customUserDetails == null) {
+            return;
+        }
+        User user = userRepository.findByUsername(customUserDetails.getUsername());
+        FuneralBusiness funeralBusiness = funeralBusinessRepository.findById(businessId).get();
+        if (!funeralBusiness.getOwner().equals(user)) {
+            throw new IllegalArgumentException("등록한 업체가 아닙니다.");
+        }
     }
 }
