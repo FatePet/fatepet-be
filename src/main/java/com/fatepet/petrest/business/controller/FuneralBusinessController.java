@@ -7,11 +7,13 @@ import com.fatepet.petrest.business.controller.dto.response.BusinessResponse;
 import com.fatepet.petrest.business.controller.dto.response.FuneralBusinessDetailsResponse;
 import com.fatepet.petrest.global.response.ApiResponse;
 import com.fatepet.petrest.global.response.ResponseCode;
+import com.fatepet.petrest.user.security.dto.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,10 +46,11 @@ public class FuneralBusinessController {
     }
 
     @GetMapping("/{businessId}")
-    public ResponseEntity<ApiResponse<FuneralBusinessDetailsResponse>> getBusinessDetails(@PathVariable Long businessId) {
+    public ResponseEntity<ApiResponse<FuneralBusinessDetailsResponse>> getBusinessDetails(@AuthenticationPrincipal CustomUserDetails customUserDetails, @PathVariable Long businessId) {
+        funeralBusinessService.isValidAdmin(customUserDetails, businessId);
+
         FuneralBusinessDetailsResponse response = funeralBusinessService.getBusinessDetails(businessId);
         return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS, response));
     }
-
 
 }
