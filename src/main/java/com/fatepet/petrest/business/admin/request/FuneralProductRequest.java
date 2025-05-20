@@ -14,5 +14,5 @@ public class FuneralProductRequest {
     private String name;
     private String description;
     private String price;
-    private boolean image;
+    private Boolean image;
 }

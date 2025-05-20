@@ -15,6 +15,7 @@ public enum ResponseCode {
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
     DUPLICATE(HttpStatus.BAD_REQUEST, "중복된 값입니다."),
     INVALID_INPUT(HttpStatus.BAD_REQUEST, "입력값이 유효하지 않습니다."),
+    NOT_NULL(HttpStatus.BAD_REQUEST, "필수 값 누락."),
 
     // 401 UNAUTHORIZED
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증이 필요합니다."),

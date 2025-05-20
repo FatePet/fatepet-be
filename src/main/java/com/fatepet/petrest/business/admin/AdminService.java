@@ -17,12 +17,15 @@ import com.fatepet.petrest.funeralproduct.ProductCategory;
 import com.fatepet.petrest.user.User;
 import com.fatepet.petrest.user.UserRepository;
 import com.fatepet.petrest.user.security.dto.CustomUserDetails;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -126,8 +129,10 @@ public class AdminService {
         int imageIndex = 0;
         for (FuneralProductRequest dto : serviceList) {
 
+            validAddService(dto);
+
             String imageUrl = null;
-            if (dto.isImage()) {
+            if (dto.getImage()) {
                 if (serviceImages == null || imageIndex >= serviceImages.length) {
                     throw new IllegalArgumentException("서비스 이미지 개수가 부족합니다.");
                 }
@@ -151,6 +156,12 @@ public class AdminService {
                     .build();
 
             funeralProductRepository.save(product);
+        }
+    }
+
+    private void validAddService(FuneralProductRequest dto) {
+        if (dto.getType() == null || dto.getName() == null || dto.getPrice() == null || dto.getImage() == null) {
+            throw new IllegalArgumentException("서비스 Json 필수값 누락.");
         }
     }
 
@@ -194,4 +205,27 @@ public class AdminService {
         funeralBusinessRepository.delete(funeralBusiness);
     }
 
+    @Transactional
+    public void processBusinessUpdate(
+            Long businessId,
+            String name,
+            String category,
+            MultipartFile thumbnail,
+            String address,
+            Double latitude,
+            Double longitude,
+            String businessHours,
+            String phoneNumber,
+            String email,
+            String additionalInfo,
+            String addServiceJson,
+            List<MultipartFile> addServiceImages,
+            String updateServiceJson,
+            List<MultipartFile> updateServiceImages,
+            List<Long> removeServiceIds,
+            List<MultipartFile> addAdditionalImages,
+            List<Long> removeAdditionalImageIds
+    ) {
+
+    }
 }
