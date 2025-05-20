@@ -35,18 +35,18 @@ public class AdminBusinessController {
     public ResponseEntity<ApiResponse<Void>> addBusiness(@AuthenticationPrincipal CustomUserDetails customUserDetails,
                                                          @RequestParam("name") String name,
                                                          @RequestParam("category") String category,
-                                                         @RequestPart("thumbnail") MultipartFile thumbnail,
                                                          @RequestParam("address") String address,
                                                          @RequestParam("latitude") Double latitude,
                                                          @RequestParam("longitude") Double longitude,
                                                          @RequestParam("businessHours") String businessHours,
                                                          @RequestParam("phoneNumber") String phoneNumber,
                                                          @RequestParam("email") String email,
+                                                         @RequestParam(value = "additionalInfo", required = false) String additionalInfo,
 
                                                          @RequestParam("service") String serviceJson, // JSON 문자열로 받음
+                                                         @RequestPart("thumbnail") MultipartFile thumbnail,
                                                          @RequestPart(value = "serviceImage", required = false) MultipartFile[] serviceImages,
-                                                         @RequestPart(value = "additionalImage", required = false) MultipartFile[] additionalImages,
-                                                         @RequestParam(value = "additionalInfo", required = false) String additionalInfo) {
+                                                         @RequestPart(value = "additionalImage", required = false) MultipartFile[] additionalImages) {
         adminService.addBusiness(name, category, thumbnail, address, latitude, longitude,
                 businessHours, phoneNumber, email, serviceJson,
                 serviceImages, additionalImages, additionalInfo,
@@ -64,6 +64,41 @@ public class AdminBusinessController {
     @DeleteMapping("/business/{businessId}")
     public ResponseEntity<ApiResponse<Void>> deleteBusiness(@AuthenticationPrincipal CustomUserDetails customUserDetails, @PathVariable("businessId") Long businessId) {
         adminService.deleteBusiness(customUserDetails, businessId);
+        return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS));
+    }
+
+    @PatchMapping("/business/{businessId}")
+    public ResponseEntity<ApiResponse<Void>> updateBusiness(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @PathVariable("businessId") Long businessId,
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "category", required = false) String category,
+            @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail,
+            @RequestParam(value = "address", required = false) String address,
+            @RequestParam(value = "latitude", required = false) Double latitude,
+            @RequestParam(value = "longitude", required = false) Double longitude,
+            @RequestParam(value = "businessHours", required = false) String businessHours,
+            @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
+            @RequestParam(value = "email", required = false) String email,
+            @RequestParam(value = "addService", required = false) String addServiceJson,
+            @RequestPart(value = "addServiceImage", required = false) List<MultipartFile> addServiceImages,
+            @RequestParam(value = "updateService", required = false) String updateServiceJson,
+            @RequestPart(value = "updateServiceImage", required = false) List<MultipartFile> updateServiceImages,
+            @RequestParam(value = "removeServiceIds", required = false) List<Long> removeServiceIds,
+            @RequestPart(value = "addAdditionalImage", required = false) List<MultipartFile> addAdditionalImages,
+            @RequestParam(value = "removeAdditionalImageIds", required = false) List<Long> removeAdditionalImageIds,
+            @RequestParam(value = "additionalInfo", required = false) String additionalInfo
+    ) {
+        adminService.processBusinessUpdate(
+                businessId,
+                name, category, thumbnail, address, latitude, longitude,
+                businessHours, phoneNumber, email, additionalInfo,
+                addServiceJson, addServiceImages,
+                updateServiceJson, updateServiceImages,
+                removeServiceIds,
+                addAdditionalImages, removeAdditionalImageIds
+        );
+
         return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS));
     }
 }
