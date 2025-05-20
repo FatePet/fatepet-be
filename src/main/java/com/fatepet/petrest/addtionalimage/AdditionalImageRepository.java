@@ -11,4 +11,5 @@ public interface AdditionalImageRepository extends JpaRepository<AdditionalImage
 
     List<AdditionalImage> findAllByBusiness_Id(Long businessId);
 
+    List<AdditionalImage> findByBusiness(FuneralBusiness business);
 }

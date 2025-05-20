@@ -9,4 +9,6 @@ public interface FuneralProductRepository extends JpaRepository<FuneralProduct, 
     List<FuneralProduct> findAllByBusinessId(Long businessId);
 
     void deleteAllByBusiness(FuneralBusiness business);
+
+    List<FuneralProduct> findByBusiness(FuneralBusiness business);
 }

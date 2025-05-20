@@ -7,8 +7,12 @@ import com.fatepet.petrest.addtionalimage.AdditionalImage;
 import com.fatepet.petrest.addtionalimage.AdditionalImageRepository;
 import com.fatepet.petrest.business.FuneralBusiness;
 import com.fatepet.petrest.business.FuneralBusinessRepository;
-import com.fatepet.petrest.business.admin.request.FuneralProductRequest;
-import com.fatepet.petrest.business.admin.response.BusinessListResponse;
+import com.fatepet.petrest.business.admin.dto.AddServiceDto;
+import com.fatepet.petrest.business.admin.dto.BusinessInfoDto;
+import com.fatepet.petrest.business.admin.dto.UpdateServiceDto;
+import com.fatepet.petrest.business.admin.dto.response.BusinessListResponse;
+import com.fatepet.petrest.business.admin.util.BusinessUtil;
+import com.fatepet.petrest.business.admin.valid.BusinessValidator;
 import com.fatepet.petrest.common.S3Uploader;
 import com.fatepet.petrest.counseling.CounselingRepository;
 import com.fatepet.petrest.funeralproduct.FuneralProduct;
@@ -17,18 +21,16 @@ import com.fatepet.petrest.funeralproduct.ProductCategory;
 import com.fatepet.petrest.user.User;
 import com.fatepet.petrest.user.UserRepository;
 import com.fatepet.petrest.user.security.dto.CustomUserDetails;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,6 +45,8 @@ public class AdminService {
     private final CounselingRepository counselingRepository;
     private final ObjectMapper objectMapper;
     private final S3Uploader s3Uploader;
+    private final BusinessValidator businessValidator;
+    private final BusinessUtil businessUtil;
 
     public boolean CheckDuplicated(String businessName) {
         return funeralBusinessRepository.existsByName(businessName);
@@ -65,35 +69,17 @@ public class AdminService {
     }
 
     @Transactional
-    public void addBusiness(String name, String category, MultipartFile thumbnail,
-                            String address, Double latitude, Double longitude,
-                            String businessHours, String phoneNumber, String email,
-                            String serviceJson, MultipartFile[] serviceImages,
-                            MultipartFile[] additionalImages, String additionalInfo,
-                            CustomUserDetails customUserDetails) {
-        User user = userRepository.findByUsername(customUserDetails.getUsername());
-        String mainImageUrl = s3Uploader.uploadFile(thumbnail);
+    public void createBusinessProc(String name, String category, MultipartFile thumbnail,
+                                   String address, Double latitude, Double longitude,
+                                   String businessHours, String phoneNumber, String email,
+                                   String serviceJson, MultipartFile[] serviceImages,
+                                   MultipartFile[] additionalImages, String additionalInfo,
+                                   CustomUserDetails customUserDetails) {
 
-        if (!isValidEmail(email)) {
-            throw new IllegalArgumentException("이메일 형식을 맞춰주세요.");
-        }
-
-        if (!isValidPhone(phoneNumber)) {
-            throw new IllegalArgumentException("전화번호 형식을 맞춰주세요.");
-        }
-
-        if (funeralBusinessRepository.existsByName(name)) {
-            throw new IllegalArgumentException("이미 등록된 업체 명 입니다.");
-        }
-
-        if (additionalImages.length > 10) {
-            throw new IllegalArgumentException("추가사진은 최대 10장 입니다.");
-        }
-
-        FuneralBusiness business = FuneralBusiness.builder()
+        BusinessInfoDto businessInfoDto = BusinessInfoDto.builder()
                 .name(name)
-                .mainImageUrl(mainImageUrl)
                 .category(category)
+                .thumbnail(thumbnail)
                 .address(address)
                 .latitude(latitude)
                 .longitude(longitude)
@@ -101,18 +87,48 @@ public class AdminService {
                 .phoneNumber(phoneNumber)
                 .email(email)
                 .additionalInfo(additionalInfo)
-                .owner(user)
                 .build();
-        funeralBusinessRepository.save(business);
 
-        List<FuneralProductRequest> serviceList = parseServiceJson(serviceJson);
+        FuneralBusiness business = createBusiness(businessInfoDto, customUserDetails);
 
-        createService(serviceImages, serviceList, business);
+        List<AddServiceDto> addServiceDtoList = businessUtil.parseAddServiceJson(serviceJson);
+
+        createService(serviceImages, addServiceDtoList, business);
 
         createAdditionalImage(additionalImages, business);
     }
 
+    @NotNull
+    private FuneralBusiness createBusiness(BusinessInfoDto businessInfoDto, CustomUserDetails customUserDetails) {
+
+        businessValidator.validDuplicateBusinessName(businessInfoDto.getName());
+        businessValidator.validEmail(businessInfoDto.getEmail());
+        businessValidator.validPhoneNumber(businessInfoDto.getPhoneNumber());
+
+        User user = userRepository.findByUsername(customUserDetails.getUsername());
+        String mainImageUrl = s3Uploader.uploadFile(businessInfoDto.getThumbnail());
+
+        FuneralBusiness business = FuneralBusiness.builder()
+                .name(businessInfoDto.getName())
+                .mainImageUrl(mainImageUrl)
+                .category(businessInfoDto.getCategory())
+                .address(businessInfoDto.getAddress())
+                .latitude(businessInfoDto.getLatitude())
+                .longitude(businessInfoDto.getLongitude())
+                .businessHours(businessInfoDto.getBusinessHours())
+                .phoneNumber(businessInfoDto.getPhoneNumber())
+                .email(businessInfoDto.getEmail())
+                .additionalInfo(businessInfoDto.getAdditionalInfo())
+                .owner(user)
+                .build();
+        funeralBusinessRepository.save(business);
+        return business;
+    }
+
+
     private void createAdditionalImage(MultipartFile[] additionalImages, FuneralBusiness business) {
+        if (additionalImages == null) { return; }
+        businessValidator.validAdditionalImageCount(additionalImages);
         if (additionalImages != null) {
             for (MultipartFile file : additionalImages) {
                 String url = s3Uploader.uploadFile(file);
@@ -125,15 +141,16 @@ public class AdminService {
         }
     }
 
-    private void createService(MultipartFile[] serviceImages, List<FuneralProductRequest> serviceList, FuneralBusiness business) {
+    private void createService(MultipartFile[] serviceImages, List<AddServiceDto> serviceList, FuneralBusiness business) {
+        if (serviceList == null || serviceList.isEmpty()) { return;}
         int imageIndex = 0;
-        for (FuneralProductRequest dto : serviceList) {
+        for (AddServiceDto dto : serviceList) {
 
-            validAddService(dto);
+            businessValidator.validAddService(dto);
 
             String imageUrl = null;
             if (dto.getImage()) {
-                if (serviceImages == null || imageIndex >= serviceImages.length) {
+                if (serviceImages == null) {
                     throw new IllegalArgumentException("서비스 이미지 개수가 부족합니다.");
                 }
                 imageUrl = s3Uploader.uploadFile(serviceImages[imageIndex++]);
@@ -158,31 +175,6 @@ public class AdminService {
             funeralProductRepository.save(product);
         }
     }
-
-    private void validAddService(FuneralProductRequest dto) {
-        if (dto.getType() == null || dto.getName() == null || dto.getPrice() == null || dto.getImage() == null) {
-            throw new IllegalArgumentException("서비스 Json 필수값 누락.");
-        }
-    }
-
-    private List<FuneralProductRequest> parseServiceJson(String serviceJson) {
-        List<FuneralProductRequest> serviceList;
-        try {
-            serviceList = objectMapper.readValue(serviceJson, new TypeReference<>() {});
-        } catch (JsonProcessingException e) {
-            throw new IllegalArgumentException("서비스 항목 JSON 파싱 실패", e);
-        }
-        return serviceList;
-    }
-
-    private boolean isValidEmail(String email) {
-        return Pattern.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$", email);
-    }
-
-    private boolean isValidPhone(String phone) {
-        return Pattern.matches("^(01[016789]-\\d{3,4}-\\d{4}|0\\d{1,2}-\\d{3,4}-\\d{4})$", phone);
-    }
-
 
     @Transactional
     public void deleteBusiness(CustomUserDetails customUserDetails, Long businessId) {
@@ -219,13 +211,128 @@ public class AdminService {
             String email,
             String additionalInfo,
             String addServiceJson,
-            List<MultipartFile> addServiceImages,
+            MultipartFile[] addServiceImages,
             String updateServiceJson,
-            List<MultipartFile> updateServiceImages,
+            MultipartFile[] updateServiceImages,
             List<Long> removeServiceIds,
-            List<MultipartFile> addAdditionalImages,
+            MultipartFile[] addAdditionalImages,
             List<Long> removeAdditionalImageIds
     ) {
+        BusinessInfoDto businessInfoDto = BusinessInfoDto.builder()
+                .name(name)
+                .category(category)
+                .thumbnail(thumbnail)
+                .address(address)
+                .latitude(latitude)
+                .longitude(longitude)
+                .businessHours(businessHours)
+                .phoneNumber(phoneNumber)
+                .email(email)
+                .additionalInfo(additionalInfo)
+                .build();
 
+        List<AddServiceDto> addServiceDtoList = businessUtil.parseAddServiceJson(addServiceJson);
+        List<UpdateServiceDto> updateServiceDtoList = businessUtil.parseUpdateServiceJson(updateServiceJson);
+
+        FuneralBusiness business = updateBusiness(businessId, businessInfoDto);
+
+
+
+        businessValidator.validServiceCount(addServiceDtoList == null ? 0 : addServiceDtoList.size(), removeServiceIds == null ? 0 : removeServiceIds.size(), business);
+
+        createService(addServiceImages, addServiceDtoList, business);
+        updateService(updateServiceImages, updateServiceDtoList, business);
+        removeService(removeServiceIds, business);
+
+        businessValidator.validAdditionalImageCount(addAdditionalImages == null ? 0 : addAdditionalImages.length, removeAdditionalImageIds == null ? 0 : removeAdditionalImageIds.size(), business);
+
+        createAdditionalImage(addAdditionalImages, business);
+        removeAdditionalImage(removeAdditionalImageIds, business);
+    }
+
+    private FuneralBusiness updateBusiness(Long businessId, BusinessInfoDto businessInfoDto) {
+
+        FuneralBusiness business = funeralBusinessRepository.findById(businessId).get();
+
+        if (businessInfoDto.getName() != null) {
+            businessValidator.validDuplicateBusinessName(businessInfoDto.getName());
+            business.setName(businessInfoDto.getName());
+        }
+        if (businessInfoDto.getCategory() != null) business.setCategory(businessInfoDto.getCategory());
+        if (businessInfoDto.getAddress() != null) business.setAddress(businessInfoDto.getAddress());
+        if (businessInfoDto.getLatitude() != null) business.setLatitude(businessInfoDto.getLatitude());
+        if (businessInfoDto.getLongitude() != null) business.setLongitude(businessInfoDto.getLongitude());
+        if (businessInfoDto.getBusinessHours() != null) business.setBusinessHours(businessInfoDto.getBusinessHours());
+        if (businessInfoDto.getPhoneNumber() != null) {
+            businessValidator.validPhoneNumber(businessInfoDto.getPhoneNumber());
+            business.setPhoneNumber(businessInfoDto.getPhoneNumber());
+        }
+        if (businessInfoDto.getEmail() != null) {
+            businessValidator.validEmail(businessInfoDto.getEmail());
+            business.setEmail(businessInfoDto.getEmail());
+        }
+        if (businessInfoDto.getAdditionalInfo() != null) business.setAdditionalInfo(businessInfoDto.getAdditionalInfo());
+        if (businessInfoDto.getThumbnail() != null) {
+            String thumbnailUrl = s3Uploader.uploadFile(businessInfoDto.getThumbnail());
+            business.setMainImageUrl(thumbnailUrl);
+        }
+        business.setUpdatedAt(LocalDateTime.now());
+
+        return business;
+    }
+
+    private void updateService(MultipartFile[] serviceImages, List<UpdateServiceDto> serviceList, FuneralBusiness business) {
+        if (serviceList == null || serviceList.isEmpty()) return;
+
+        int imageIndex = 0;
+
+        for (int i = 0; i < serviceList.size(); i++) {
+            UpdateServiceDto dto = serviceList.get(i);
+            businessValidator.validExistService(dto.getServiceId());
+            businessValidator.validIsBusinessInService(dto.getServiceId(), business);
+            FuneralProduct service = funeralProductRepository.findById(dto.getServiceId()).get();
+
+            if (dto.getType() != null) {
+                ProductCategory productCategory;
+                try {
+                    productCategory = ProductCategory.valueOf(dto.getType());
+                } catch (IllegalArgumentException | NullPointerException e) {
+                    throw new IllegalArgumentException("서비스의 카테코리의 형식이 맞지 않습니다.");
+                }
+                service.setCategory(productCategory);
+            }
+            if (dto.getName() != null) service.setName(dto.getName());
+            if (dto.getDescription() != null) service.setDescription(dto.getDescription());
+            if (dto.getPrice() != null) service.setPrice(dto.getPrice());
+
+            if (dto.getImageType() == 1) {
+                if (serviceImages == null) {
+                    throw new IllegalArgumentException("수정할 서비스 이미지 개수가 부족합니다.");
+                }
+                service.setImageUrl(s3Uploader.uploadFile(serviceImages[imageIndex++]));
+            } else if (dto.getImageType() == 2) {
+                service.setImageUrl(null);
+            }
+
+            service.setUpdatedAt(LocalDateTime.now());
+        }
+    }
+
+    private void removeService(List<Long> removeServiceIds, FuneralBusiness business) {
+        if (removeServiceIds == null || removeServiceIds.isEmpty()) return;
+        for (Long removeServiceId : removeServiceIds) {
+            businessValidator.validExistService(removeServiceId);
+            businessValidator.validIsBusinessInService(removeServiceId, business);
+            funeralProductRepository.deleteById(removeServiceId);
+        }
+    }
+
+    private void removeAdditionalImage(List<Long> removeAdditionalImageIds, FuneralBusiness business) {
+        if (removeAdditionalImageIds == null || removeAdditionalImageIds.isEmpty()) return;
+        for (Long removeAdditionalImageId : removeAdditionalImageIds) {
+            businessValidator.validExistAdditionalImage(removeAdditionalImageId);
+            businessValidator.validIsBusinessInAdditionalImage(removeAdditionalImageId, business);
+            additionalImageRepository.deleteById(removeAdditionalImageId);
+        }
     }
 }

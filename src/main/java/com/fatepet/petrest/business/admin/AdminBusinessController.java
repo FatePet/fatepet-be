@@ -1,8 +1,9 @@
 package com.fatepet.petrest.business.admin;
 
+import com.fatepet.petrest.business.admin.valid.BusinessValidator;
 import com.fatepet.petrest.global.response.ApiResponse;
 import com.fatepet.petrest.global.response.ResponseCode;
-import com.fatepet.petrest.business.admin.response.BusinessListResponse;
+import com.fatepet.petrest.business.admin.dto.response.BusinessListResponse;
 import com.fatepet.petrest.user.security.dto.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import java.util.List;
 public class AdminBusinessController {
 
     private final AdminService adminService;
+    private final BusinessValidator businessValidator;
 
     @GetMapping("/business/check-name")
     public ResponseEntity<ApiResponse<Void>> checkBusinessName(@RequestParam("name") String businessName) {
@@ -47,7 +49,7 @@ public class AdminBusinessController {
                                                          @RequestPart("thumbnail") MultipartFile thumbnail,
                                                          @RequestPart(value = "serviceImage", required = false) MultipartFile[] serviceImages,
                                                          @RequestPart(value = "additionalImage", required = false) MultipartFile[] additionalImages) {
-        adminService.addBusiness(name, category, thumbnail, address, latitude, longitude,
+        adminService.createBusinessProc(name, category, thumbnail, address, latitude, longitude,
                 businessHours, phoneNumber, email, serviceJson,
                 serviceImages, additionalImages, additionalInfo,
                 customUserDetails);
@@ -81,14 +83,15 @@ public class AdminBusinessController {
             @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
             @RequestParam(value = "email", required = false) String email,
             @RequestParam(value = "addService", required = false) String addServiceJson,
-            @RequestPart(value = "addServiceImage", required = false) List<MultipartFile> addServiceImages,
+            @RequestPart(value = "addServiceImage", required = false) MultipartFile[] addServiceImages,
             @RequestParam(value = "updateService", required = false) String updateServiceJson,
-            @RequestPart(value = "updateServiceImage", required = false) List<MultipartFile> updateServiceImages,
+            @RequestPart(value = "updateServiceImage", required = false) MultipartFile[] updateServiceImages,
             @RequestParam(value = "removeServiceIds", required = false) List<Long> removeServiceIds,
-            @RequestPart(value = "addAdditionalImage", required = false) List<MultipartFile> addAdditionalImages,
+            @RequestPart(value = "addAdditionalImage", required = false) MultipartFile[] addAdditionalImages,
             @RequestParam(value = "removeAdditionalImageIds", required = false) List<Long> removeAdditionalImageIds,
             @RequestParam(value = "additionalInfo", required = false) String additionalInfo
     ) {
+        businessValidator.isValidAdmin(customUserDetails, businessId);
         adminService.processBusinessUpdate(
                 businessId,
                 name, category, thumbnail, address, latitude, longitude,
