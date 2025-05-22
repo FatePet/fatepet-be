@@ -1,8 +1,11 @@
+# 1단계: 빌드
+FROM gradle:7.6-jdk17 AS builder
+WORKDIR /app
+COPY . .
+RUN ./gradlew clean build --no-daemon
+
+# 2단계: 런타임
 FROM openjdk:17-jdk-alpine
+COPY --from=builder /app/build/libs/*.jar /app.jar
 
-# JAR 파일을 컨테이너로 복사
-ARG JAR_FILE=./build/libs/*.jar
-COPY ${JAR_FILE} /app.jar
-
-# 애플리케이션 실행 명령어
 ENTRYPOINT ["java", "-jar", "/app.jar"]
