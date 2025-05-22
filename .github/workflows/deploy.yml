@@ -35,7 +35,7 @@ jobs:
           source: "."
           target: "/home/ubuntu/fatepet"
 
-            - name: ⚙️ Create .env file on EC2
+      - name: ⚙️ Create .env file on EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
