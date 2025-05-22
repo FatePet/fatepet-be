@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: ✅ Checkout source code
+      - name: Checkout source code
         uses: actions/checkout@v3
 
-      - name: 🔐 Connect to EC2 and deploy
+      - name: Connect to EC2 and deploy
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -24,10 +24,10 @@ jobs:
             mkdir -p /home/ubuntu/fatepet
             cd /home/ubuntu/fatepet
 
-            echo "🧹 Clean old files"
+            echo "Clean old files"
             rm -rf *
 
-      - name: 📦 Upload project files to EC2
+      - name: Upload project files to EC2
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -58,9 +58,9 @@ SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }}
 SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }}
 EOF
 
-            echo "✅ .env file created"
+            echo ".env file created"
 
-      - name: 🐳 Run docker-compose on EC2
+      - name: Run docker-compose on EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
