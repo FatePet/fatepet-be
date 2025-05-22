@@ -32,9 +32,8 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 
 
-
 	// mysql
-		runtimeOnly 'com.mysql:mysql-connector-j'
+	runtimeOnly 'com.mysql:mysql-connector-j'
 
 	// lombok
 	annotationProcessor 'org.projectlombok:lombok'
@@ -42,12 +41,6 @@ dependencies {
 
 	// asw S3
 	implementation 'software.amazon.awssdk:s3:2.20.0'
-
-	// aws lambda
-	implementation 'com.amazonaws.serverless:aws-serverless-java-container-springboot3:2.0.1'
-	implementation 'com.amazonaws:aws-lambda-java-core:1.2.2'
-	implementation 'com.amazonaws:aws-lambda-java-events:3.11.1'
-	runtimeOnly 'com.amazonaws:aws-lambda-java-log4j2:1.5.1'
 
 
 	// sms

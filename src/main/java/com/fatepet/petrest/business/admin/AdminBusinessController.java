@@ -6,6 +6,7 @@ import com.fatepet.petrest.global.response.ResponseCode;
 import com.fatepet.petrest.business.admin.dto.response.BusinessListResponse;
 import com.fatepet.petrest.user.security.dto.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin")
 @RequiredArgsConstructor
+@Slf4j
 public class AdminBusinessController {
 
     private final AdminService adminService;
@@ -49,6 +51,7 @@ public class AdminBusinessController {
                                                          @RequestPart("thumbnail") MultipartFile thumbnail,
                                                          @RequestPart(value = "serviceImage", required = false) MultipartFile[] serviceImages,
                                                          @RequestPart(value = "additionalImage", required = false) MultipartFile[] additionalImages) {
+
         adminService.createBusinessProc(name, category, thumbnail, address, latitude, longitude,
                 businessHours, phoneNumber, email, serviceJson,
                 serviceImages, additionalImages, additionalInfo,
