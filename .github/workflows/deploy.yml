@@ -3,7 +3,7 @@ name: Deploy to EC2
 on:
   push:
     branches:
-      - main  # main 브랜치에 push 될 때마다 실행
+      - main
 
 jobs:
   deploy:
@@ -20,20 +20,53 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            # 디렉토리 없으면 생성
+            echo "📁 Create project directory"
             mkdir -p /home/ubuntu/fatepet
             cd /home/ubuntu/fatepet
 
-            # 기존 프로젝트 삭제
+            echo "🧹 Clean old files"
             rm -rf *
 
-            # GitHub에서 최신 코드 clone (Personal Access Token 사용 필요 없음, GitHub Actions에서 직접 복사됨)
-            # 대신 현재 워크스페이스의 코드 동기화
-            echo "🚀 Pulling latest code via rsync"
-            rsync -avz --delete ./ ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/ubuntu/fatepet
+      - name: 📦 Upload project files to EC2
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "."
+          target: "/home/ubuntu/fatepet"
 
-            # Docker Compose 실행
-            echo "🐳 Running Docker Compose"
+      - name: ⚙️ Create .env file on EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cat <<EOF > /home/ubuntu/fatepet/.env
+AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}
+AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }}
+COOLSMS_API_KEY=${{ secrets.COOLSMS_API_KEY }}
+COOLSMS_API_SECRET=${{ secrets.COOLSMS_API_SECRET }}
+COOLSMS_FROM_NUMBER=${{ secrets.COOLSMS_FROM_NUMBER }}
+JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}
+MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}
+MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}
+MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}
+MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}
+SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }}
+SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }}
+EOF
+
+            echo "✅ .env file created"
+
+      - name: 🐳 Run docker-compose on EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
             cd /home/ubuntu/fatepet
             docker compose -f docker-compose.prod.yml down
             docker compose -f docker-compose.prod.yml up -d --build
