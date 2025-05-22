@@ -17,21 +17,8 @@ public class GlobalExceptionHandler {
         ApiResponse<Void> response = ApiResponse.of(e.getStatusCode(), e.getMessage());
         return ResponseEntity.status(e.getStatusCode()).body(response);
     }
-//    @ExceptionHandler(FuneralBusinessException.class)
-//    public ResponseEntity<ApiResponse<Void>> handleFuneralBusinessException(FuneralBusinessException e) {
-//        ApiResponse<Void> response = ApiResponse.of(e.getStatusCode(), e.getMessage());
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
-//
-//        return new ResponseEntity<>(response, headers, HttpStatus.valueOf(e.getStatusCode()));
-//    }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Void>> handleUnexpectedException(Exception e) {
-        ApiResponse<Void> response = ApiResponse.of(ResponseCode.INTERNAL_ERROR);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-    }
+
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiResponse<Void>> handleIllegalArgumentException(IllegalArgumentException e) {
@@ -44,5 +31,11 @@ public class GlobalExceptionHandler {
         String message = String.format("필수 파라미터 '%s'가 누락되었습니다.", e.getParameterName());
         ApiResponse<Void> response = ApiResponse.of(HttpStatus.BAD_REQUEST.value(), message);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse<Void>> handleUnexpectedException(Exception e) {
+        ApiResponse<Void> response = ApiResponse.of(ResponseCode.INTERNAL_ERROR);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 }

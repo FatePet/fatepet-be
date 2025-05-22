@@ -15,3 +15,20 @@ logging:
     software.amazon.awssdk: TRACE
     com.fatepet.petrest.business.admin.AdminBusinessController: TRACE
     com.fatepet.petrest.business.admin.AdminService: TRACE
+
+
+
+    root: INFO
+
+    # Spring MVC 요청 흐름 추적용
+    org.springframework.web.servlet.DispatcherServlet: TRACE
+    org.springframework.web.method.HandlerMethod: TRACE
+
+    # 내 애플리케이션 (Controller, Service 등)
+    com.fatepet.petrest.business.admin: DEBUG
+
+    # Spring Security 흐름 확인용
+    org.springframework.security.web.FilterChainProxy: DEBUG  # 어떤 필터가 적용되었는지
+    org.springframework.security.web.authentication: DEBUG    # 인증 관련
+    org.springframework.security.web.access: DEBUG            # 인가 관련
+    org.springframework.security.authentication: DEBUG
