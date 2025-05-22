@@ -36,5 +36,6 @@ out/
 ### VS Code ###
 .vscode/
 
-.aws-sam/
-samconfig.toml
+
+.env
+
