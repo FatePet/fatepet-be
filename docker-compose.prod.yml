@@ -1,12 +1,7 @@
 services:
   app:
-    build: .  # 현재 디렉토리에 있는 Dockerfile 사용
+    build: .
     container_name: fatepet-app
-    working_dir: /app
-    volumes:
-      - .:/app
-      - gradle-cache:/root/.gradle
-    command: ./gradlew bootRun
     ports:
       - "8080:8080"
     depends_on:
@@ -15,6 +10,8 @@ services:
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+    volumes:
+      - gradle-cache:/root/.gradle
     networks:
       - fatepet-network
 
