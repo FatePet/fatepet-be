@@ -26,6 +26,7 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       TZ: Asia/Seoul
+      LANG: C.UTF-8
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
     volumes:
       - mysql-data:/var/lib/mysql
