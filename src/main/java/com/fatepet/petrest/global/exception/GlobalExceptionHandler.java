@@ -18,7 +18,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(e.getStatusCode()).body(response);
     }
 
-
+    @ExceptionHandler(SmsException.class)
+    public ResponseEntity<ApiResponse<Void>> handleSmsException(SmsException e){
+        System.out.println(e.getMessage());
+        System.out.println(e.getStatusCode());
+        ApiResponse<Void> response = ApiResponse.of(e.getStatusCode(), e.getMessage());
+        System.out.println(response);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiResponse<Void>> handleIllegalArgumentException(IllegalArgumentException e) {
