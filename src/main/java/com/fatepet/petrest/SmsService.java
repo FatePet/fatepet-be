@@ -57,10 +57,10 @@ public class SmsService {
         } catch (NurigoMessageNotReceivedException e) {
             log.error("문자 발송 실패 목록={}", e.getFailedMessageList());
             log.error("오류 메세지={}", e.getMessage());
-            throw new SmsException("문자 전송 잔액 부족");
+            throw new SmsException(ResponseCode.INTERNAL_ERROR);
         } catch (Exception e) {
             log.error("기타 오류 메세지={}", e.getMessage());
-            throw new SmsException(ResponseCode.INTERNAL_ERROR);
+            throw new SmsException("문자 전송 잔액 부족");
         }
     }
 

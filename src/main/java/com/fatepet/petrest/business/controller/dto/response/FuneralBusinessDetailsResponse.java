@@ -5,6 +5,7 @@ import com.fatepet.petrest.addtionalimage.controller.dto.response.AdditionalImag
 import com.fatepet.petrest.business.FuneralBusiness;
 import com.fatepet.petrest.funeralproduct.FuneralProduct;
 import com.fatepet.petrest.funeralproduct.controller.dto.response.FuneralProductResponse;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -29,14 +30,14 @@ public class FuneralBusinessDetailsResponse {
 
     private List<FuneralProductResponse> services;
 
-    private String additionalInfo;
-
-    private List<AdditionalImageResponse> additionalImages;
+    private AdditionalInfoResponse additionalInfo;
 
     @Builder
     private FuneralBusinessDetailsResponse(String name, String address, String category, String mainImageUrl, String businessHours, String phoneNumber,
                                            String email, List<FuneralProductResponse> services,
-                                           String additionalInfo, List<AdditionalImageResponse> additionalImages) {
+                                           String additionalInfo, List<AdditionalImageResponse> images) {
+
+        AdditionalInfoResponse additionalInfoResponse = new AdditionalInfoResponse(additionalInfo, images);
         this.name = name;
         this.address = address;
         this.category = category;
@@ -45,8 +46,7 @@ public class FuneralBusinessDetailsResponse {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.services = services;
-        this.additionalInfo = additionalInfo;
-        this.additionalImages = additionalImages;
+        this.additionalInfo = additionalInfoResponse;
     }
 
     public static FuneralBusinessDetailsResponse from(FuneralBusiness business, List<FuneralProduct> products,
@@ -69,7 +69,15 @@ public class FuneralBusinessDetailsResponse {
                 .email(business.getEmail())
                 .services(services)
                 .additionalInfo(business.getAdditionalInfo())
-                .additionalImages(additionalImages)
+                .images(additionalImages)
                 .build();
     }
+
+    @Getter
+    @AllArgsConstructor
+    public static class AdditionalInfoResponse {
+        private String additionalInfo;
+        List<AdditionalImageResponse> images;
+    }
+
 }
