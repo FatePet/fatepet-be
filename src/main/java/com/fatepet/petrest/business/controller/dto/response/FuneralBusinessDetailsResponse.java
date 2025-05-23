@@ -37,7 +37,7 @@ public class FuneralBusinessDetailsResponse {
                                            String email, List<FuneralProductResponse> services,
                                            String additionalInfo, List<AdditionalImageResponse> images) {
 
-        AdditionalInfoResponse additionalInfoResponse = new AdditionalInfoResponse(additionalInfo, images);
+        AdditionalInfoResponse additionalInfoResponse = new AdditionalInfoResponse(images, additionalInfo);
         this.name = name;
         this.address = address;
         this.category = category;
@@ -76,8 +76,8 @@ public class FuneralBusinessDetailsResponse {
     @Getter
     @AllArgsConstructor
     public static class AdditionalInfoResponse {
-        private String additionalInfo;
         List<AdditionalImageResponse> images;
+        private String description;
     }
 
 }
