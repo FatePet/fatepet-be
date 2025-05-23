@@ -1,6 +1,6 @@
 services:
   app:
-    build: .  # 현재 디렉토리에 있는 Dockerfile 사용
+    build: .
     container_name: fatepet-app
     ports:
       - "8080:8080"
