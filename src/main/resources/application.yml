@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: local
+    active: prod
 
   datasource:
     url: ${SPRING_DATASOURCE_URL}
