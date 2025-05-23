@@ -31,10 +31,16 @@ public class CounselingService {
         String businessEmail = business.getEmail();
         String contactTypeName = ContactType.getDisplayNameByKey(contactType);
 
-
         smsService.sendSMS(businessPhoneNumber, customerPhoneNumber, contactTypeName, inquiry);
-        mailService.sendMail(businessEmail,customerPhoneNumber, contactTypeName, inquiry);
+        mailService.sendMail(businessEmail, customerPhoneNumber, contactTypeName, inquiry);
 
+        Counseling counseling = Counseling.builder()
+                .business(business)
+                .contactType(ContactType.valueOf(contactType))
+                .phoneNumber(customerPhoneNumber)
+                .message(inquiry)
+                .build();
+        counselingRepository.save(counseling);
     }
 
 
