@@ -1,8 +1,8 @@
 package com.fatepet.petrest.funeralproduct;
 
 public enum ProductCategory {
-    BASIC("기본 사항"),
-    OPTIONAL("선택 사항"),
+    BASIC("기본항목"),
+    OPTIONAL("선택항목"),
     PACKAGE("패키지");
 
     private final String displayName;
