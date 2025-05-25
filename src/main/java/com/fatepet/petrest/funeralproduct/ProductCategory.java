@@ -14,4 +14,13 @@ public enum ProductCategory {
     public String getDisplayName() {
         return displayName;
     }
+
+    public static ProductCategory fromDisplayName(String displayName) {
+        for (ProductCategory category : ProductCategory.values()) {
+            if (category.getDisplayName().equals(displayName)) {
+                return category;
+            }
+        }
+        throw new IllegalArgumentException("Unknown displayName: " + displayName);
+    }
 }

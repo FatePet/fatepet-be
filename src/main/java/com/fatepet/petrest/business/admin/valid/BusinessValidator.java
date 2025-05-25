@@ -117,4 +117,11 @@ public class BusinessValidator {
         }
     }
 
+    public void validCategory(String category) {
+        if (!category.isEmpty()) {
+            if (!category.equals("장묘")) {
+                throw new IllegalArgumentException("업체 카테고리 형식이 맞지 않습니다.");
+            }
+        }
+    }
 }
