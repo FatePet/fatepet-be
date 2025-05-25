@@ -62,8 +62,8 @@ public class BusinessValidator {
     }
 
     public void validPhoneNumber(String phone) {
-        if (!Pattern.matches("^(01[016789]-\\d{3,4}-\\d{4}|0\\d{1,2}-\\d{3,4}-\\d{4})$", phone)) {
-            throw new IllegalArgumentException("전화번호 형식을 맞춰주세요.");
+        if (!Pattern.matches("^\\d{10,11}$", phone)) {
+            throw new IllegalArgumentException("전화번호는 숫자만 입력하며 10자리 또는 11자리여야 합니다.");
         }
     }
 
@@ -117,4 +117,11 @@ public class BusinessValidator {
         }
     }
 
+    public void validCategory(String category) {
+        if (!category.isEmpty()) {
+            if (!category.equals("장묘")) {
+                throw new IllegalArgumentException("업체 카테고리 형식이 맞지 않습니다.");
+            }
+        }
+    }
 }

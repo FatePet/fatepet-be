@@ -1,20 +1,19 @@
 services:
   app:
-    build: .  # 현재 디렉토리에 있는 Dockerfile 사용
+    build: .
     container_name: fatepet-app
-    working_dir: /app
-    volumes:
-      - .:/app
-      - gradle-cache:/root/.gradle
-    command: ./gradlew bootRun
     ports:
       - "8080:8080"
+    env_file: .env
     depends_on:
       - mysql
     environment:
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_PROFILES_ACTIVE: prod
+    volumes:
+      - gradle-cache:/root/.gradle
     networks:
       - fatepet-network
 
@@ -26,6 +25,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
+      TZ: Asia/Seoul
+      LANG: C.UTF-8
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
     volumes:
       - mysql-data:/var/lib/mysql

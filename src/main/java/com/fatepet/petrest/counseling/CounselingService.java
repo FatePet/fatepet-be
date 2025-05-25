@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CounselingService {
 
@@ -27,14 +26,20 @@ public class CounselingService {
         FuneralBusiness business = funeralBusinessRepository.findById(businessId)
                 .orElseThrow(() -> new FuneralBusinessException(ResponseCode.NOT_FOUND));
 
-        String businessPhoneNumber = business.getPhoneNumber().replaceAll("-", "");
+        String businessPhoneNumber = business.getPhoneNumber();
         String businessEmail = business.getEmail();
         String contactTypeName = ContactType.getDisplayNameByKey(contactType);
 
-
         smsService.sendSMS(businessPhoneNumber, customerPhoneNumber, contactTypeName, inquiry);
-        mailService.sendMail(businessEmail,customerPhoneNumber, contactTypeName, inquiry);
+        mailService.sendMail(businessEmail, customerPhoneNumber, contactTypeName, inquiry);
 
+        Counseling counseling = Counseling.builder()
+                .business(business)
+                .contactType(ContactType.valueOf(contactType))
+                .phoneNumber(customerPhoneNumber)
+                .message(inquiry)
+                .build();
+        counselingRepository.save(counseling);
     }
 
 

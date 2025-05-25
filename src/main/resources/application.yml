@@ -1,12 +1,18 @@
 spring:
   profiles:
-    active: local
+    active: prod
 
   datasource:
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
 
   jwt:
     secret: ${JWT_SECRET_KEY}
@@ -28,7 +34,6 @@ coolsms:
   apikey: ${COOLSMS_API_KEY}
   apisecret: ${COOLSMS_API_SECRET}
   fromnumber: ${COOLSMS_FROM_NUMBER}
-
 
 
 aws:
