@@ -8,6 +8,7 @@ public enum ResponseCode {
 
     // 200 OK
     SUCCESS(HttpStatus.OK, "요청이 성공했습니다."),
+    DELETED(HttpStatus.OK, "성공적으로 삭제되었습니다."),
     CREATED(HttpStatus.CREATED, "리소스가 생성되었습니다."),
     DUPLICATE_CHECK_PASSED(HttpStatus.OK, "중복 검사를 통과했습니다."),
 

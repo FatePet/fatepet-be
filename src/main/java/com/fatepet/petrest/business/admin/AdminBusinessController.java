@@ -69,7 +69,7 @@ public class AdminBusinessController {
     @DeleteMapping("/business/{businessId}")
     public ResponseEntity<ApiResponse<Void>> deleteBusiness(@AuthenticationPrincipal CustomUserDetails customUserDetails, @PathVariable("businessId") Long businessId) {
         adminService.deleteBusiness(customUserDetails, businessId);
-        return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS));
+        return ResponseEntity.ok(ApiResponse.of(ResponseCode.DELETED));
     }
 
     @PatchMapping("/business/{businessId}")
