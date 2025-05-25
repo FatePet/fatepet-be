@@ -102,6 +102,7 @@ public class AdminService {
         businessValidator.validDuplicateBusinessName(businessInfoDto.getName());
         businessValidator.validEmail(businessInfoDto.getEmail());
         businessValidator.validPhoneNumber(businessInfoDto.getPhoneNumber());
+        businessValidator.validCategory(businessInfoDto.getCategory());
 
         User user = userRepository.findByUsername(customUserDetails.getUsername());
         String mainImageUrl = s3Uploader.uploadFile(businessInfoDto.getThumbnail());
@@ -156,7 +157,7 @@ public class AdminService {
 
             ProductCategory productCategory;
             try {
-                productCategory = ProductCategory.valueOf(dto.getType());
+                productCategory = ProductCategory.fromDisplayName(dto.getType());
             } catch (IllegalArgumentException | NullPointerException e) {
                 throw new IllegalArgumentException("서비스의 카테코리의 형식이 맞지 않습니다.");
             }
@@ -256,7 +257,10 @@ public class AdminService {
             businessValidator.validDuplicateBusinessName(businessInfoDto.getName());
             business.setName(businessInfoDto.getName());
         }
-        if (businessInfoDto.getCategory() != null) business.setCategory(businessInfoDto.getCategory());
+        if (businessInfoDto.getCategory() != null) {
+            businessValidator.validCategory(businessInfoDto.getCategory());
+            business.setCategory(businessInfoDto.getCategory());
+        }
         if (businessInfoDto.getAddress() != null) business.setAddress(businessInfoDto.getAddress());
         if (businessInfoDto.getLatitude() != null) business.setLatitude(businessInfoDto.getLatitude());
         if (businessInfoDto.getLongitude() != null) business.setLongitude(businessInfoDto.getLongitude());
@@ -293,7 +297,7 @@ public class AdminService {
             if (dto.getType() != null) {
                 ProductCategory productCategory;
                 try {
-                    productCategory = ProductCategory.valueOf(dto.getType());
+                    productCategory = ProductCategory.fromDisplayName(dto.getType());
                 } catch (IllegalArgumentException | NullPointerException e) {
                     throw new IllegalArgumentException("서비스의 카테코리의 형식이 맞지 않습니다.");
                 }
