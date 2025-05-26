@@ -18,7 +18,7 @@ public class FuneralBusinessDetailsResponse {
 
     private String address;
 
-    private String category;
+    private String type;
 
     private String mainImageUrl;
 
@@ -33,14 +33,14 @@ public class FuneralBusinessDetailsResponse {
     private AdditionalInfoResponse additionalInfo;
 
     @Builder
-    private FuneralBusinessDetailsResponse(String name, String address, String category, String mainImageUrl, String businessHours, String phoneNumber,
+    private FuneralBusinessDetailsResponse(String name, String address, String type, String mainImageUrl, String businessHours, String phoneNumber,
                                            String email, List<FuneralProductResponse> services,
                                            String additionalInfo, List<AdditionalImageResponse> images) {
 
         AdditionalInfoResponse additionalInfoResponse = new AdditionalInfoResponse(images, additionalInfo);
         this.name = name;
         this.address = address;
-        this.category = category;
+        this.type = type;
         this.mainImageUrl = mainImageUrl;
         this.businessHours = businessHours;
         this.phoneNumber = phoneNumber;
@@ -62,7 +62,7 @@ public class FuneralBusinessDetailsResponse {
         return FuneralBusinessDetailsResponse.builder()
                 .name(business.getName())
                 .address(business.getAddress())
-                .category("장묘")
+                .type("장묘")
                 .mainImageUrl(business.getMainImageUrl())
                 .businessHours(business.getBusinessHours())
                 .phoneNumber(business.getPhoneNumber())
