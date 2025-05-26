@@ -13,7 +13,7 @@ public class BusinessResponse {
 
     private String address;
 
-    private String category;
+    private String type;
 
     private String mainImageUrl;
 
@@ -22,11 +22,11 @@ public class BusinessResponse {
     private String phoneNumber;
 
     @Builder
-    private BusinessResponse(Long businessId, String name, String address, String category, String mainImageUrl, String businessHours, String phoneNumber) {
+    private BusinessResponse(Long businessId, String name, String address, String type, String mainImageUrl, String businessHours, String phoneNumber) {
         this.businessId = businessId;
         this.name = name;
         this.address = address;
-        this.category = category;
+        this.type = type;
         this.mainImageUrl = mainImageUrl;
         this.businessHours = businessHours;
         this.phoneNumber = phoneNumber;
@@ -37,7 +37,7 @@ public class BusinessResponse {
                 .businessId(business.getId())
                 .name(business.getName())
                 .address(business.getAddress())
-                .category("장묘")
+                .type("장묘")
                 .mainImageUrl(business.getMainImageUrl())
                 .businessHours(business.getBusinessHours())
                 .phoneNumber(business.getPhoneNumber())
