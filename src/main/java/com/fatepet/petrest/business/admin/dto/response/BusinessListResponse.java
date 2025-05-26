@@ -12,5 +12,5 @@ public class BusinessListResponse {
     private String name;
     private String address;
     private String category;
-    private String thumbnailUrl;
+    private String mainImageUrl;
 }

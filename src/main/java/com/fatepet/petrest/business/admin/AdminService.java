@@ -62,7 +62,7 @@ public class AdminService {
                         .name(business.getName())
                         .address(business.getAddress())
                         .category(business.getCategory())
-                        .thumbnailUrl(business.getMainImageUrl())
+                        .mainImageUrl(business.getMainImageUrl())
                         .build())
                 .collect(Collectors.toList());
     }
