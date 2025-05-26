@@ -48,7 +48,7 @@ public class AdminBusinessController {
                                                          @RequestParam(value = "additionalInfo", required = false) String additionalInfo,
 
                                                          @RequestParam("service") String serviceJson, // JSON 문자열로 받음
-                                                         @RequestPart("thumbnail") MultipartFile thumbnail,
+                                                         @RequestPart("mainImage") MultipartFile thumbnail,
                                                          @RequestPart(value = "serviceImage", required = false) MultipartFile[] serviceImages,
                                                          @RequestPart(value = "additionalImage", required = false) MultipartFile[] additionalImages) {
 
@@ -78,7 +78,7 @@ public class AdminBusinessController {
             @PathVariable("businessId") Long businessId,
             @RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "category", required = false) String category,
-            @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail,
+            @RequestPart(value = "mainImage", required = false) MultipartFile thumbnail,
             @RequestParam(value = "address", required = false) String address,
             @RequestParam(value = "latitude", required = false) Double latitude,
             @RequestParam(value = "longitude", required = false) Double longitude,
