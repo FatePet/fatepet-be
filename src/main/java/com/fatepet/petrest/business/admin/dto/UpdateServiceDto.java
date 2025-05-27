@@ -14,6 +14,7 @@ public class UpdateServiceDto {
     private String type;
     private String name;
     private String description;
+    private String priceType;
     private String price;
     private Integer imageType; // 0: 유지, 1: 수정/추가, 2: 삭제
 }

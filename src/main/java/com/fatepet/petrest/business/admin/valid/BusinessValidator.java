@@ -7,6 +7,8 @@ import com.fatepet.petrest.business.FuneralBusinessRepository;
 import com.fatepet.petrest.business.admin.dto.AddServiceDto;
 import com.fatepet.petrest.funeralproduct.FuneralProduct;
 import com.fatepet.petrest.funeralproduct.FuneralProductRepository;
+import com.fatepet.petrest.funeralproduct.PriceType;
+import com.fatepet.petrest.funeralproduct.ProductCategory;
 import com.fatepet.petrest.user.User;
 import com.fatepet.petrest.user.UserRepository;
 import com.fatepet.petrest.user.security.dto.CustomUserDetails;
@@ -50,8 +52,32 @@ public class BusinessValidator {
     }
 
     public void validAddService(AddServiceDto dto) {
-        if (dto.getType() == null || dto.getName() == null || dto.getPrice() == null || dto.getImage() == null) {
+        if (dto.getType() == null || dto.getName() == null || dto.getPriceType() == null || dto.getImage() == null) {
             throw new IllegalArgumentException("서비스 Json 필수값 누락.");
+        }
+
+        validServiceType(dto.getType());
+
+        validPriceType(dto.getPriceType(), dto.getPrice());
+    }
+
+    public void validPriceType(String type, String price) {
+        try {
+            PriceType.fromDisplayName(type);
+        } catch (IllegalArgumentException | NullPointerException e) {
+            throw new IllegalArgumentException("서비스의 priceType의 형식이 맞지 않습니다.");
+        }
+
+        if (type.equals(PriceType.MANUAL.getDisplayName()) && price == null) {
+            throw new IllegalArgumentException("priceType 직접입력 시 price 필수");
+        }
+    }
+
+    public void validServiceType(String type) {
+        try {
+            ProductCategory.fromDisplayName(type);
+        } catch (IllegalArgumentException | NullPointerException e) {
+            throw new IllegalArgumentException("서비스의 카테코리의 형식이 맞지 않습니다.");
         }
     }
 
