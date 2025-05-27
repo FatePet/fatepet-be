@@ -23,9 +23,10 @@ jobs:
             echo "📁 Create project directory"
             mkdir -p /home/ubuntu/fatepet
             cd /home/ubuntu/fatepet
+            echo "Fix ownership"
+            sudo chown -R ubuntu:ubuntu .
             echo "Clean old files"
             rm -rf *
-
       - name: Upload project files to EC2
         uses: appleboy/scp-action@v0.1.4
         with:
