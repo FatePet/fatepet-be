@@ -2,7 +2,6 @@ package com.fatepet.petrest.funeralproduct.controller.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fatepet.petrest.funeralproduct.FuneralProduct;
-import com.fatepet.petrest.funeralproduct.PriceType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,7 +10,7 @@ public class FuneralProductResponse {
 
     private Long serviceId;
 
-    private String category;
+    private String type;
 
     private String name;
 
@@ -25,9 +24,9 @@ public class FuneralProductResponse {
     private String priceType;
 
     @Builder
-    private FuneralProductResponse(Long serviceId, String category, String name, String description, String imageUrl, String price, String priceType) {
+    private FuneralProductResponse(Long serviceId, String type, String name, String description, String imageUrl, String price, String priceType) {
         this.serviceId = serviceId;
-        this.category = category;
+        this.type = type;
         this.name = name;
         this.description = description;
         this.imageUrl = imageUrl;
@@ -38,7 +37,7 @@ public class FuneralProductResponse {
     public static FuneralProductResponse from(FuneralProduct product){
         return FuneralProductResponse.builder()
                 .serviceId(product.getId())
-                .category(product.getCategory().getDisplayName())
+                .type(product.getCategory().getDisplayName())
                 .name(product.getName())
                 .description(product.getDescription())
                 .imageUrl(product.getImageUrl())
