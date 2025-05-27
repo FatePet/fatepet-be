@@ -21,6 +21,6 @@ public enum ProductCategory {
                 return category;
             }
         }
-        throw new IllegalArgumentException("Unknown displayName: " + displayName);
+        throw new IllegalArgumentException("serviceType 형식 오류 " + displayName);
     }
 }

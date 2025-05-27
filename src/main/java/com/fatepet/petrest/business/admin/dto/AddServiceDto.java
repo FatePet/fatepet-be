@@ -13,6 +13,7 @@ public class AddServiceDto {
     private String type;
     private String name;
     private String description;
+    private String priceType;
     private String price;
     private Boolean image;
 }

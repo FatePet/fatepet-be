@@ -16,6 +16,7 @@ import com.fatepet.petrest.common.S3Uploader;
 import com.fatepet.petrest.counseling.CounselingRepository;
 import com.fatepet.petrest.funeralproduct.FuneralProduct;
 import com.fatepet.petrest.funeralproduct.FuneralProductRepository;
+import com.fatepet.petrest.funeralproduct.PriceType;
 import com.fatepet.petrest.funeralproduct.ProductCategory;
 import com.fatepet.petrest.user.User;
 import com.fatepet.petrest.user.UserRepository;
@@ -152,21 +153,22 @@ public class AdminService {
                 if (serviceImages == null) {
                     throw new IllegalArgumentException("서비스 이미지 개수가 부족합니다.");
                 }
-                imageUrl = s3Uploader.uploadFile(serviceImages[imageIndex++]);
+                try {
+                    imageUrl = s3Uploader.uploadFile(serviceImages[imageIndex++]);
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    throw new IllegalArgumentException("서비스 이미지 개수가 부족합니다.");
+                }
             }
 
-            ProductCategory productCategory;
-            try {
-                productCategory = ProductCategory.fromDisplayName(dto.getType());
-            } catch (IllegalArgumentException | NullPointerException e) {
-                throw new IllegalArgumentException("서비스의 카테코리의 형식이 맞지 않습니다.");
-            }
+            ProductCategory productCategory = ProductCategory.fromDisplayName(dto.getType());
+            PriceType priceType = PriceType.fromDisplayName(dto.getPriceType());
 
             FuneralProduct product = FuneralProduct.builder()
                     .business(business)
                     .category(productCategory)
                     .name(dto.getName())
                     .description(dto.getDescription())
+                    .priceType(priceType)
                     .price(dto.getPrice())
                     .imageUrl(imageUrl)
                     .build();
@@ -295,23 +297,28 @@ public class AdminService {
             FuneralProduct service = funeralProductRepository.findById(dto.getServiceId()).get();
 
             if (dto.getType() != null) {
-                ProductCategory productCategory;
-                try {
-                    productCategory = ProductCategory.fromDisplayName(dto.getType());
-                } catch (IllegalArgumentException | NullPointerException e) {
-                    throw new IllegalArgumentException("서비스의 카테코리의 형식이 맞지 않습니다.");
-                }
+                businessValidator.validServiceType(dto.getType());
+                ProductCategory productCategory = ProductCategory.fromDisplayName(dto.getType());
                 service.setCategory(productCategory);
             }
             if (dto.getName() != null) service.setName(dto.getName());
             if (dto.getDescription() != null) service.setDescription(dto.getDescription());
+            if (dto.getPriceType() != null) {
+                businessValidator.validPriceType(dto.getPriceType(), dto.getPrice());
+                PriceType priceType = PriceType.fromDisplayName(dto.getPriceType());
+                service.setPriceType(priceType);
+            }
             if (dto.getPrice() != null) service.setPrice(dto.getPrice());
 
             if (dto.getImageType() == 1) {
                 if (serviceImages == null) {
                     throw new IllegalArgumentException("수정할 서비스 이미지 개수가 부족합니다.");
                 }
-                service.setImageUrl(s3Uploader.uploadFile(serviceImages[imageIndex++]));
+                try {
+                    service.setImageUrl(s3Uploader.uploadFile(serviceImages[imageIndex++]));
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    throw new IllegalArgumentException("수정할 서비스 이미지 개수가 부족합니다.");
+                }
             } else if (dto.getImageType() == 2) {
                 service.setImageUrl(null);
             }
