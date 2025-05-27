@@ -27,6 +27,9 @@ public class FuneralProduct {
 
     private String description;
 
+    @Enumerated(EnumType.STRING)
+    private PriceType priceType;
+
     private String price;
 
     private String imageUrl;
@@ -36,11 +39,12 @@ public class FuneralProduct {
     private LocalDateTime updatedAt;
 
     @Builder
-    private FuneralProduct(FuneralBusiness business, ProductCategory category, String name, String description, String price, String imageUrl) {
+    private FuneralProduct(FuneralBusiness business, ProductCategory category, String name, String description, PriceType priceType, String price, String imageUrl) {
         this.business = business;
         this.category = category;
         this.name = name;
         this.description = description;
+        this.priceType = priceType;
         this.price = price;
         this.imageUrl = imageUrl;
     }

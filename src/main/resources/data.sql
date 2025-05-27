@@ -24,14 +24,13 @@ VALUES
 
 -- 장묘 서비스(FuneralProduct) 데이터
 INSERT INTO funeral_product (
-    id, business_id, category, name, description, price, image_url, created_at, updated_at
+    id, business_id, category, name, description, price, price_type, image_url, created_at, updated_at
 )
 VALUES
-    (1, 1, 'BASIC', '베이직 장례', '기본 장례 서비스', '35,000원', 'https://example.com/service1.jpg', NOW(), NOW()),
-    (2, 1, 'OPTIONAL', '프리미엄 관', '프리미엄 장례 관입니다.', '직접문의', 'https://example.com/service2.jpg', NOW(), NOW()),
-    (3, 1, 'PACKAGE', '장례+프리미엄 관 패키지', '패키지입니다.', '350,000원', 'https://example.com/service3.jpg', NOW(), NOW()),
-    (4, 2, 'OPTIONAL', '스탠다드 장례', '스탠다드 서비스', '40,000원', 'https://example.com/service4.jpg', NOW(), NOW());
-
+    (1, 1, 'BASIC', '베이직 장례', '기본 장례 서비스', '35,000원', 'MANUAL', 'https://example.com/service1.jpg', NOW(), NOW()),
+    (2, 1, 'OPTIONAL', '프리미엄 관', '프리미엄 장례 관입니다.', '직접문의', 'CONTACT', 'https://example.com/service2.jpg', NOW(), NOW()),
+    (3, 1, 'PACKAGE', '장례+프리미엄 관 패키지', '패키지입니다.', '350,000원', 'MANUAL', 'https://example.com/service3.jpg', NOW(), NOW()),
+    (4, 2, 'OPTIONAL', '스탠다드 장례', '스탠다드 서비스', '무료', 'FREE', 'https://example.com/service4.jpg', NOW(), NOW());
 -- 추가 이미지(AdditionalImage) 데이터
 INSERT INTO additional_image (
     id, business_id, image_url, created_at, updated_at
