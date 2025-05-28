@@ -22,6 +22,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -80,13 +81,13 @@ public class SecurityConfig {
 
                         CorsConfiguration configuration = new CorsConfiguration();
 
-                        configuration.setAllowedOrigins(Collections.singletonList("https://localhost:3000"));
+                        configuration.setAllowedOrigins(Arrays.asList("https://localhost:3000", "https://fatepet.co.kr", "http://localhost:3000"));
                         configuration.setAllowedMethods(Collections.singletonList("*"));
                         configuration.setAllowCredentials(true);
                         configuration.setAllowedHeaders(Collections.singletonList("*"));
                         configuration.setMaxAge(3600L);
 
-                        configuration.setExposedHeaders(Arrays.asList("Authorization", "x-amzn-Remapped-Authorization"));
+                        configuration.setExposedHeaders(List.of("Authorization"));
 
                         return configuration;
                     }
