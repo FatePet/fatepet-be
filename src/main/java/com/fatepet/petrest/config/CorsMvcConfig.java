@@ -11,10 +11,10 @@ public class CorsMvcConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
 
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000")
+                .allowedOrigins("https://localhost:3000", "https://fatepet.co.kr", "http://localhost:3000")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
-                .exposedHeaders("x-amzn-Remapped-Authorization", "Authorization")
+                .exposedHeaders("Authorization")
                 .allowCredentials(true);
     }
 
