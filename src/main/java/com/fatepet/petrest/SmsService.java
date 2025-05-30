@@ -37,7 +37,7 @@ public class SmsService {
     public void sendSMS(String businessPhoneNumber, String customerPhoneNumber, String contactType, String inquiry) {
         String messageText = String.format(
                 "페이트펫을 통한 상담 요청이 있습니다.\n" +
-                        "현장결제 단계에서 최종 금액의 5%%할인을 적용부탁드립니다.\n\n" +
+//                        "현장결제 단계에서 최종 금액의 5%%할인을 적용부탁드립니다.\n\n" +
                         "연락처 : %s\n" +
                         "연락 방법: %s\n" +
                         "기타문의 사항 : %s",
