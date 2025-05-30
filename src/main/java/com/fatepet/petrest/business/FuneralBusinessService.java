@@ -51,9 +51,6 @@ public class FuneralBusinessService {
                 .orElseThrow(() -> new FuneralBusinessException(ResponseCode.NOT_FOUND));
 
         List<FuneralProduct> products = funeralProductRepository.findAllByBusinessId(businessId);
-        System.out.println(products.toString());
-
-
         List<AdditionalImage> additionalImages = additionalImageRepository.findAllByBusiness_Id(business.getId());
 
         return FuneralBusinessDetailsResponse.from(business, products, additionalImages);

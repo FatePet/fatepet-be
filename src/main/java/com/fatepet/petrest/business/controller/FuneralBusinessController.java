@@ -30,7 +30,7 @@ public class FuneralBusinessController {
     @GetMapping
     public ResponseEntity<ApiResponse<List<BusinessResponse>>> getBusinessList(BusinessSearchRequest request,
                                                                                @RequestParam(defaultValue = "POPULAR") String sort,
-                                                                               @PageableDefault(size = 10)
+                                                                               @PageableDefault(size = 20)
                                                                                Pageable pageable) {
         SortOption sortOption = SortOption.from(sort);
         List<BusinessResponse> response;
