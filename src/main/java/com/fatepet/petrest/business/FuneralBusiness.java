@@ -42,6 +42,8 @@ public class FuneralBusiness {
 
     private Integer recommendRank;
 
+    private Integer minPrice;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
@@ -49,7 +51,7 @@ public class FuneralBusiness {
     @Builder
     private FuneralBusiness(String name, String category, String address, double latitude, double longitude, String mainImageUrl,
                             String businessHours, String phoneNumber, String email, String additionalInfo,
-                            User owner, Integer recommendRank) {
+                            User owner, Integer recommendRank, Integer minPrice) {
         this.name = name;
         this.address = address;
         this.category = category;
@@ -62,6 +64,7 @@ public class FuneralBusiness {
         this.additionalInfo = additionalInfo;
         this.owner = owner;
         this.recommendRank = recommendRank;
+        this.minPrice = minPrice;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }

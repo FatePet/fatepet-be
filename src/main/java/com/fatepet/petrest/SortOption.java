@@ -8,7 +8,9 @@ public enum SortOption {
 
     DISTANCE("DISTANCE", null),
     RECOMMEND("RECOMMEND", Sort.by(Sort.Direction.ASC, "recommendRank")),
-    POPULAR("POPULAR", Sort.by(Sort.Direction.DESC, "createdAt"));
+    POPULAR("POPULAR", Sort.by(Sort.Direction.DESC, "createdAt")),
+    LOWEST_PRICE("LOWEST_PRICE", Sort.by(Sort.Direction.ASC, "minPrice"));
+
 
     private final String key;
     private final Sort sort;

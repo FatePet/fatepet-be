@@ -31,10 +31,10 @@ public class MailService {
     }
 
     private String buildEmailBody(String customerPhoneNumber, String contactTypeName, String inquiry) {
+        //                 <p>현장결제단계에서 최종 금액의 <strong>5%% 할인</strong>을 적용 부탁드립니다.</p>
         return String.format("""
             <div>
                 <p><strong>페이트 펫을 통한 상담 요청이 있습니다.</strong></p>
-                <p>현장결제단계에서 최종 금액의 <strong>5%% 할인</strong>을 적용 부탁드립니다.</p>
                 <br/>
                 <p><strong>연락처:</strong> %s</p>
                 <p><strong>연락 방법:</strong> %s</p>
