@@ -3,6 +3,7 @@ package com.fatepet.petrest.global.exception;
 import com.fatepet.petrest.global.response.ApiResponse;
 import com.fatepet.petrest.global.response.ResponseCode;
 import org.springframework.http.HttpHeaders;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MissingServletRequestParameterException;
