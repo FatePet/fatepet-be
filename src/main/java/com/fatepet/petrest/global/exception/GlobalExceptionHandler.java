@@ -46,6 +46,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<String>> handleUnexpectedException(Exception e) {
         log.error("Unexpected exception occurred: {} - {}", e.getClass().getSimpleName(), e.getMessage(), e);
 
+        e.printStackTrace();
+
         String errorMessage = String.format("[%s] %s", e.getClass().getSimpleName(), e.getMessage());
 
         ApiResponse<String> response = ApiResponse.of(ResponseCode.INTERNAL_ERROR, errorMessage);
