@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(FuneralBusinessException.class)
@@ -41,8 +42,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Void>> handleUnexpectedException(Exception e) {
-        ApiResponse<Void> response = ApiResponse.of(ResponseCode.INTERNAL_ERROR);
+    public ResponseEntity<ApiResponse<String>> handleUnexpectedException(Exception e) {
+        log.error("Unexpected exception occurred: {} - {}", e.getClass().getSimpleName(), e.getMessage(), e);
+
+        String errorMessage = String.format("[%s] %s", e.getClass().getSimpleName(), e.getMessage());
+
+        ApiResponse<String> response = ApiResponse.of(ResponseCode.INTERNAL_ERROR, errorMessage);
+
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 }
