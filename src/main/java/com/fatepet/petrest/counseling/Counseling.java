@@ -19,10 +19,11 @@ public class Counseling {
     @JoinColumn(name = "funeral_business_id")
     private FuneralBusiness business;
 
+    @Enumerated(EnumType.STRING)
     private ContactType contactType;
 
     private String phoneNumber;
-
+        
     private String message;
 
     @Builder
